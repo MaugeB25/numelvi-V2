@@ -1,0 +1,820 @@
+:root {
+  --numelvi-dark: #081c1a;
+  --numelvi-primary: #00857c;
+  --numelvi-primary-strong: #00796b;
+  --numelvi-panel-left: #e8e9db;
+  --numelvi-panel-form: #f5f5f5;
+  --numelvi-input-bg: #f0faf9;
+  --numelvi-input-border: #b2dfdb;
+  --numelvi-text: #1e1e1e;
+  --numelvi-text-soft: #505050;
+  --numelvi-accent: #cc225e;
+  --numelvi-white: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Invention", sans-serif;
+  color: var(--numelvi-text);
+  background: transparent;
+
+}
+
+.is-layout-constrained> :where(:not(.alignleft):not(.alignright):not(.alignfull)) {
+  max-width: unset;
+
+}
+
+.calculator-grid {
+  grid-template-columns: unset !important;
+  display: flex !important;
+}
+
+.page-shell {
+  min-height: 100vh;
+}
+
+.site-header .top-header {
+  background: var(--numelvi-dark);
+  padding: 24px 80px;
+}
+
+.brand-logo {
+  width: 233px;
+  height: 50px;
+  object-fit: contain;
+}
+
+.msd-logo {
+  width: 134px;
+  height: 48px;
+  object-fit: contain;
+}
+
+.hero-section {
+  padding: 48px 90px 24px;
+}
+
+.hero-content {
+  color: var(--numelvi-white);
+}
+
+.hero-title {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.reg-mark {
+  font-size: 32px;
+  vertical-align: top;
+}
+
+.hero-subtitle {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.reg-mark-small {
+  font-size: 16px;
+  vertical-align: top;
+}
+
+.main-content {
+  padding: 0;
+}
+
+.calculator-card {
+  border-radius: 20px;
+  overflow: hidden;
+  max-width: 1100px;
+  margin: auto;
+}
+
+.calculator-grid {
+  display: grid;
+  grid-template-columns: 353px 1fr;
+}
+
+.left-panel {
+  background: var(--numelvi-panel-left);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-top: 56px !important;
+  max-width: 332px !important;
+
+}
+
+.left-panel-content {
+  padding: 0 32px;
+}
+
+.left-highlight {
+  background: var(--numelvi-accent);
+  color: var(--numelvi-white);
+  border-radius: 4px;
+  padding: 16px;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 24px;
+}
+
+.steps-list {
+  max-width: 285px;
+}
+
+.step-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.step-icon-wrap {
+  width: 49px;
+  height: 49px;
+  flex-shrink: 0;
+}
+
+.step-icon-image {
+  width: 49px;
+  height: 49px;
+  display: block;
+}
+
+.step-text {
+  width: 221px;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+.step-divider {
+  margin: 0 50%;
+  width: 1px;
+  height: 32px;
+  background: #081c1a;
+}
+
+.left-dog-wrap {
+  padding: 0 40px;
+  display: flex;
+  justify-content: center;
+}
+
+.dog-image {
+  width: 263px;
+  height: auto;
+  object-fit: contain;
+}
+
+.form-panel {
+  background: var(--numelvi-panel-form);
+  padding: 32px 24px;
+}
+
+.form-title-wrap {
+  gap: 8px;
+  margin-bottom: 28px;
+}
+
+.form-title-bar {
+  width: 3px;
+  height: 22px;
+  border-radius: 2px;
+  background: var(--numelvi-primary-strong);
+}
+
+.form-title {
+  color: var(--numelvi-primary-strong);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.form-block {
+  margin-bottom: 16px;
+}
+
+.custom-label {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.custom-input {
+  min-height: 54px;
+  border: 1px solid var(--numelvi-input-border);
+  border-radius: 8px;
+  background: var(--numelvi-white);
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+}
+
+.custom-input.input-error {
+  border-color: #A41104;
+}
+
+.field-control {
+  border: 0;
+  background: transparent;
+  width: 100%;
+  font-size: 14px;
+  color: var(--numelvi-text);
+  outline: none;
+}
+
+.field-control::placeholder {
+  color: rgba(1, 24, 28, 0.8);
+}
+
+.input-readonly {
+  background: var(--numelvi-input-bg);
+}
+
+.field-readonly-value {
+  font-size: 14px;
+}
+
+.field-helper {
+  margin-top: 8px;
+  color: var(--numelvi-text-soft);
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.field-error {
+  margin-top: 8px;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.field-error-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.field-error-text {
+  color: #A41104;
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.is-hidden {
+  display: none;
+}
+
+.input-prefix {
+  font-size: 14px;
+  margin-right: 12px;
+}
+
+.field-row {
+  margin-bottom: 16px;
+}
+
+.calculate-btn {
+  height: 64px;
+  background: var(--numelvi-primary-strong);
+  border: 0;
+  border-radius: 8px;
+  color: var(--numelvi-white);
+  font-size: 18px;
+  font-weight: 700;
+  transition: background-color 0.2s ease;
+  margin-top: 8px;
+}
+
+.calculate-btn:hover,
+.calculate-btn:focus-visible {
+  background: var(--numelvi-primary);
+  color: var(--numelvi-white);
+}
+
+.site-footer {
+  background: var(--numelvi-dark);
+  padding: 24px 80px;
+}
+
+.results-screen {
+  padding: 0;
+}
+
+.results-competitor-screen {
+  padding: 0;
+}
+
+.results-shell {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.results-header {
+  color: var(--numelvi-white);
+  margin-bottom: 24px;
+}
+
+.results-hero-title {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.results-hero-subtitle {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+div#results-numelvi-logo {
+  margin-bottom: -35px;
+  margin-left: 30px;
+}
+
+
+
+#results-vs-icon {
+  margin: auto;
+  display: inline-flex;
+  margin-top: 30px;
+  align-items: center;
+  justify-content: space-around;
+  display: flex;
+}
+
+#results-back-btn {
+  max-width: 1100px;
+  margin: auto;
+}
+
+.results-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--numelvi-white);
+  background: transparent;
+  border: 0;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 0;
+  margin-bottom: 24px;
+}
+
+.results-back-btn:hover,
+.results-back-btn:focus-visible {
+  color: #caedec;
+}
+
+.results-back-arrow {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.results-card {
+  background: #f5f5f5;
+  border-radius: 20px;
+  padding: 32px;
+}
+
+.results-competitor-card {
+  background: #f5f5f5;
+  border-radius: 20px;
+  padding: 32px;
+}
+
+.results-competitor-title {
+  color: var(--numelvi-primary-strong);
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 16px;
+}
+
+.results-title-wrap {
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.results-title-bar {
+  width: 3px;
+  height: 22px;
+  border-radius: 2px;
+  background: var(--numelvi-primary-strong);
+}
+
+.results-title {
+  color: var(--numelvi-primary-strong);
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.results-product-block {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.results-product-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  border-radius: 83px;
+  background: #004942;
+  color: var(--numelvi-white);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 0 24px;
+  margin-bottom: 16px;
+}
+
+.results-pills {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.results-pill {
+  display: inline-block;
+  background: var(--numelvi-input-bg);
+  border: 1px solid var(--numelvi-input-border);
+  border-radius: 50px;
+  padding: 4px 12px;
+  font-size: 16px;
+  line-height: 1.2;
+  color: var(--numelvi-text);
+  width: auto !important;
+  color: var(--numelvi-text);
+  width: auto;
+  align-self: baseline;
+  padding: 7px !important;
+}
+
+.results-pill strong {
+  font-weight: 600;
+}
+
+.results-product-image-wrap {
+  width: 336px;
+  flex-shrink: 0;
+}
+
+.results-product-image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.results-metrics {
+  margin-bottom: 24px;
+}
+
+.results-metric-card {
+  background: var(--numelvi-input-bg);
+  border: 1px solid var(--numelvi-input-border);
+  border-radius: 8px;
+  padding: 24px 20px;
+  height: 100%;
+}
+
+.results-metric-icon {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 12px;
+}
+
+.results-metric-icon-sm {
+  width: 40px;
+  height: 40px;
+}
+
+.results-metric-label {
+  color: #01181c;
+  font-size: 20px;
+  line-height: 1.2;
+}
+
+.results-metric-value {
+  color: #01181c;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.results-metric-value-sm {
+  color: #01181c;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.results-metric-divider {
+  width: 100%;
+  height: 1px;
+  background: #98abaf;
+}
+
+.results-competitor-note {
+  margin-top: 24px;
+  color: #1e1e1e;
+  font-size: 16px;
+  line-height: 1.1;
+}
+
+.results-cta {
+  border-radius: 8px;
+  background: #cc225e;
+  padding: 24px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.results-cta-text {
+  color: var(--numelvi-white);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.results-cta-button {
+  background: var(--numelvi-white);
+  color: var(--numelvi-text);
+  border: 0;
+  border-radius: 8px;
+  min-height: 64px;
+  padding: 10px 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 700;
+  min-width: 300px;
+
+}
+
+.results-cta-button:hover,
+.results-cta-button:focus-visible {
+  background: #f0faf9;
+  color: var(--numelvi-text);
+}
+
+.footer-content {
+  gap: 24px;
+}
+
+.footer-msd-logo {
+  width: 101px;
+  height: 36px;
+  object-fit: contain;
+}
+
+.footer-text {
+  color: var(--numelvi-white);
+  font-size: 14px;
+  line-height: 1.4;
+  flex: 1;
+}
+
+.btn.disabled,
+.btn:disabled,
+fieldset:disabled .btn {
+  color: var(--bs-btn-disabled-color);
+  pointer-events: none;
+  background-color: var(--bs-btn-disabled-bg);
+  border-color: var(--bs-btn-disabled-border-color);
+  opacity: var(--bs-btn-disabled-opacity);
+  background: var(--numelvi-primary-strong);
+  color: var(--numelvi-white);
+
+}
+
+div#preco-con-concorrente-a-row,
+#preco-con-concorrente-z-row {
+  border: 1px solid #00796B;
+  background: #E1F3F1;
+  border-radius: 12px;
+  padding: 10px;
+}
+
+@media (max-width: 891.98px) {
+
+  img#results-vs-icon {
+    width: 100%;
+  }
+
+  .results-cta-button {
+
+    font-size: 15px;
+
+    min-width: unset;
+  }
+
+  div#results-numelvi-logo {
+    margin: 0 auto -35px auto;
+    text-align: center;
+  }
+
+  .results-pill {
+
+    border-radius: 13px;
+
+  }
+
+  #results-back-btn {
+
+    width: 90%;
+  }
+
+  .site-header .top-header,
+  .site-footer {
+    padding: 16px 24px;
+  }
+
+  .hero-section {
+    padding: 32px 24px 24px;
+  }
+
+  .main-content {
+    padding: 0;
+  }
+
+  .results-screen {
+    padding: 10px;
+  }
+
+  .results-cta-text {
+    font-size: 16px;
+
+  }
+
+  .results-competitor-screen {
+    padding: 0 16px;
+  }
+
+  .hero-title {
+    font-size: 32px;
+  }
+
+  #results-back-btn {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .hero-subtitle {
+    font-size: 16px;
+  }
+
+  .results-hero-title {
+    font-size: 32px;
+  }
+
+  .results-hero-subtitle {
+    font-size: 16px;
+  }
+
+  .calculator-grid {
+    grid-template-columns: 1fr !important;
+    display: unset !important;
+
+  }
+
+  .left-panel {
+    order: 1;
+    padding: 24px 16px 0;
+    max-width: 10000px;
+  }
+
+  .form-panel {
+    order: 2;
+    padding: 24px 16px;
+  }
+
+  .left-panel-content {
+    padding: 0;
+  }
+
+  .steps-list,
+  .step-text {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .left-dog-wrap {
+    padding: 16px 0 0;
+  }
+
+  .dog-image {
+    width: 200px;
+  }
+
+  .custom-input {
+    width: 100%;
+  }
+
+  .field-control {
+    width: 100%;
+  }
+
+  .footer-content {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .results-card {
+    padding: 24px 16px;
+  }
+
+  .results-competitor-card {
+    padding: 24px 16px;
+  }
+
+  .results-title {
+    font-size: 18px;
+  }
+
+  .results-product-block {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .results-product-image-wrap {
+    width: 100%;
+    max-width: 320px;
+  }
+
+  .results-product-chip {
+    font-size: 18px;
+    height: 40px;
+  }
+
+  .results-pill {
+    font-size: 15px;
+  }
+
+  .results-metric-label {
+    font-size: 15px;
+  }
+
+  .results-metric-value {
+    font-size: 26px;
+  }
+
+  .results-metric-value-sm {
+    font-size: 22px;
+  }
+
+  .results-metric-card {
+
+    padding: 17px;
+
+  }
+
+  .results-metric-icon {
+    width: 60px;
+    height: 60px;
+
+  }
+
+  .results-competitor-title {
+    font-size: 19px;
+  }
+
+  .results-competitor-note {
+    font-size: 14px;
+  }
+
+  .results-cta {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 24px 16px;
+    gap: 16px;
+  }
+
+  .results-cta-button {
+    width: 100%;
+  }
+
+  .results-competitor-screen {
+    padding: 0;
+  }
+}

@@ -1,0 +1,1465 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora Numelvi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+  <link rel="stylesheet" href="./styles.css" />
+  <script type="text/javascript" src="https://pym.nprapps.org/pym.v1.min.js"></script>
+  <script type="text/javascript">
+    var pymChild = new pym.Child();
+    function iframeLoaded() {
+      sendHeight();
+    }
+  </script>
+</head>
+
+<body>
+  <div class="page-shell">
+
+
+    <section class="hero-section">
+      <div class="hero-content text-center">
+        <h1 class="hero-title mb-3">Calculadora Numelvi<span class="reg-mark">®</span></h1>
+        <p class="hero-subtitle mb-0">
+          Compare o custo de tratamento entre Numelvi<span class="reg-mark-small">®</span> e produtos concorrentes
+        </p>
+      </div>
+    </section>
+
+
+
+    <main class="main-content container-fluid" id="calculator-main">
+      <div class="calculator-card">
+        <div class="calculator-grid">
+          <aside class="left-panel">
+            <div class="left-panel-content">
+              <div class="left-highlight">
+                Preencha os dados abaixo e veja instantaneamente o custo do tratamento.
+              </div>
+              <div class="steps-list">
+                <div class="step-item">
+                  <div class="step-icon-wrap">
+                    <img src="./p1.svg" alt="" class="step-icon-image" />
+                  </div>
+                  <p class="step-text mb-0">Informe o peso do animal e a duração do tratamento</p>
+                </div>
+                <div class="step-divider"></div>
+
+                <div class="step-item">
+                  <div class="step-icon-wrap">
+                    <img src="./p2.svg" alt="" class="step-icon-image" />
+                  </div>
+                  <p class="step-text mb-0">Insira o preço por caixa do produto</p>
+                </div>
+                <div class="step-divider"></div>
+
+                <div class="step-item mb-0">
+                  <div class="step-icon-wrap">
+                    <img src="./p3.svg" alt="" class="step-icon-image" />
+                  </div>
+                  <p class="step-text mb-0">Veja a dose recomendada, o custo por dia e o custo total</p>
+                </div>
+              </div>
+            </div>
+            <div class="left-dog-wrap">
+              <img src="./perro-col-izq.png" alt="Cachorro" class="dog-image" />
+            </div>
+          </aside>
+
+          <section class="form-panel">
+            <div class="form-title-wrap d-flex align-items-center">
+              <span class="form-title-bar"></span>
+              <h2 class="form-title mb-0">Dados do Paciente e Produto</h2>
+            </div>
+
+            <div class="form-block">
+              <label class="form-label custom-label">Produto</label>
+              <div class="custom-input">
+                <select class="field-control" id="produto-input">
+                  <option value="">Selecione um produto</option>
+                  <option value="numelvi" selected>Numelvi®</option>
+                  <option value="concorrente-a">Concorrente A – (oclacitinib)</option>
+                  <option value="concorrente-z">Concorrente Z – (ilunocitinib)</option>
+                </select>
+              </div>
+              <div class="field-error is-hidden" id="produto-error" aria-live="polite">
+                <img src="./error.svg" alt="" class="field-error-icon" />
+                <p class="field-error-text mb-0">Informe o produto para continuar.</p>
+              </div>
+            </div>
+
+            <div class="row g-3 field-row">
+              <div class="col-12 col-md-6">
+                <div class="form-block">
+                  <label class="form-label custom-label">Espécie</label>
+                  <div class="custom-input input-readonly">
+                    <span class="field-readonly-value">Cão</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="form-block">
+                  <label class="form-label custom-label">Peso corporal (kg)</label>
+                  <div class="custom-input">
+                    <input class="field-control" id="peso-corporal" type="text" inputmode="decimal"
+                      pattern="[0-9]*[\\.,]?[0-9]*" placeholder="16" max="79" />
+                  </div>
+                  <div class="field-error is-hidden" id="peso-error" aria-live="polite">
+                    <img src="./error.svg" alt="" class="field-error-icon" />
+                    <p class="field-error-text mb-0" id="peso-error-text">
+                      Peso mínimo: 3 kg. Produto não indicado para cães abaixo de 3 kg. Max – 79kgs
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row g-3 field-row">
+              <div class="col-12 col-md-6">
+                <div class="form-block">
+                  <label class="form-label custom-label">Comprimidos por día</label>
+                  <div class="custom-input input-readonly">
+                    <span class="field-readonly-value" id="comprimidos-dia-output"
+                      data-default-value="Calculado automaticamente">Calculado automaticamente</span>
+                  </div>
+                  <p class="field-helper mb-0">Preenchido automaticamente conforme o peso e produto selecionado</p>
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="form-block">
+                  <label class="form-label custom-label">Duração do tratamento (dias)</label>
+                  <div class="custom-input">
+                    <input class="field-control" id="duracao-input" type="text" inputmode="numeric" pattern="[0-9]*"
+                      placeholder="343" />
+                  </div>
+                  <div class="field-error is-hidden" id="duracao-error" aria-live="polite">
+                    <img src="./error.svg" alt="" class="field-error-icon" />
+                    <p class="field-error-text mb-0">Informe a duração do tratamento em dias para continuar.</p>
+                  </div>
+                  <p class="field-helper mb-0">Informe a duração total em dias</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="row g-3 field-row" id="preco-row">
+              <div class="form-block">
+                <label class="form-label custom-label">Preço por caixa - Numelvi®</label>
+                <div class="custom-input">
+                  <span class="input-prefix">R$</span>
+                  <input class="field-control" id="preco-input-numelvi" type="text" inputmode="numeric" pattern="[0-9]*"
+                    placeholder="230" />
+                </div>
+                <div class="field-error is-hidden" id="preco-error-numelvi" aria-live="polite">
+                  <img src="./error.svg" alt="" class="field-error-icon" />
+                  <p class="field-error-text mb-0">Informe o preço por caixa para continuar.</p>
+                </div>
+                <p class="field-helper mb-0">
+                  O preço pode variar conforme o estabelecimento veterinário ou distribuidor
+                </p>
+
+              </div>
+            </div>
+
+
+            <div class="row g-3 field-row" id="preco-con-concorrente-a-row">
+              <div class="col-12 col-md-6">
+                <div class="form-block">
+                  <label class="form-label custom-label">Preço por caixa - Concorrente A</label>
+                  <div class="custom-input">
+                    <span class="input-prefix">R$</span>
+                    <input class="field-control" id="preco-input-concorrente-a" type="text" inputmode="numeric"
+                      pattern="[0-9]*" placeholder="300" />
+                  </div>
+                  <div class="field-error is-hidden" id="preco-error-concorrente-a" aria-live="polite">
+                    <img src="./error.svg" alt="" class="field-error-icon" />
+                    <p class="field-error-text mb-0">Informe o preço por caixa para continuar.</p>
+                  </div>
+                  <p class="field-helper mb-0">
+                    Preço por caixa do concorrente selecionado
+                  </p>
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="form-block">
+                  <label class="form-label custom-label">Preço por caixa - Numelvi®</label>
+                  <div class="custom-input">
+                    <span class="input-prefix">R$</span>
+                    <input class="field-control" id="preco-input-numelvi-comparacao" type="text" inputmode="numeric"
+                      pattern="[0-9]*" placeholder="230" />
+                  </div>
+                  <div class="field-error is-hidden" id="preco-error-numelvi-comparacao" aria-live="polite">
+                    <img src="./error.svg" alt="" class="field-error-icon" />
+                    <p class="field-error-text mb-0">Informe o preço por caixa para continuar.</p>
+                  </div>
+                  <p class="field-helper mb-0">
+                    Informe para exibir a comparação de custo lado a lado
+                  </p>
+                </div>
+              </div>
+            </div>
+
+
+
+            <div class="row g-3 field-row" id="preco-con-concorrente-z-row">
+              <div class="col-12 col-md-6">
+                <div class="form-block">
+                  <label class="form-label custom-label">Preço por caixa - Concorrente Z</label>
+                  <div class="custom-input">
+                    <span class="input-prefix">R$</span>
+                    <input class="field-control" id="preco-input-concorrente-z" type="text" inputmode="numeric"
+                      pattern="[0-9]*" placeholder="300" />
+                  </div>
+                  <div class="field-error is-hidden" id="preco-error-concorrente-z" aria-live="polite">
+                    <img src="./error.svg" alt="" class="field-error-icon" />
+                    <p class="field-error-text mb-0">Informe o preço por caixa para continuar.</p>
+                  </div>
+                  <p class="field-helper mb-0">
+                    Preço por caixa do concorrente selecionado
+                  </p>
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="form-block">
+                  <label class="form-label custom-label">Preço por caixa - Numelvi®</label>
+                  <div class="custom-input">
+                    <span class="input-prefix">R$</span>
+                    <input class="field-control" id="preco-input-numelvi-comparacao-z" type="text" inputmode="numeric"
+                      pattern="[0-9]*" placeholder="230" />
+                  </div>
+                  <div class="field-error is-hidden" id="preco-error-numelvi-comparacao-z" aria-live="polite">
+                    <img src="./error.svg" alt="" class="field-error-icon" />
+                    <p class="field-error-text mb-0">Informe o preço por caixa para continuar.</p>
+                  </div>
+                  <p class="field-helper mb-0">
+                    Informe para exibir a comparação de custo lado a lado
+                  </p>
+                </div>
+              </div>
+            </div>
+
+
+
+
+
+            <button class="btn calculate-btn w-100" type="button" id="calculate-btn" disabled>Calcular</button>
+          </section>
+        </div>
+      </div>
+    </main>
+    <div id="results-back-btn" class="is-hidden">
+      <button type="button" class="btn results-back-btn">
+        <span class="results-back-arrow">←</span>
+        Voltar á calculadora
+      </button>
+    </div>
+
+
+
+    <section class="results-competitor-screen container-fluid is-hidden" id="results-concorrente-a">
+      <div class="results-shell">
+        <div class="results-competitor-card">
+          <div class="results-title-wrap d-flex align-items-center">
+
+            <h3 class="results-title mb-0"><img src="linea.svg"> Resultados</h3>
+          </div>
+
+          <h4 class="results-competitor-title">Concorrente A – (oclacitinib)</h4>
+
+          <div class="results-pills">
+            <p class="results-pill mb-0"><strong>Peso:</strong> <span id="resultado-a-peso">16kg</span></p>
+            <p class="results-pill mb-0"><strong>Comprimidos por día:</strong> <span id="resultado-a-comprimidos">1
+                comprimido/dia (d1–14) → 0.5 comprimidos/dia (d15+) - Apresentação: 16 mg</span></p>
+            <p class="results-pill mb-0"><strong>Duração do tratamento:</strong> <span id="resultado-a-duracao">34
+                dias</span></p>
+          </div>
+
+          <div class="results-metrics row g-3 pt-4">
+            <div class="col-12 col-md-4">
+              <article class="results-metric-card">
+                <img src="./icono-dosis-competencia.svg" alt="" class="results-metric-icon results-metric-icon-sm" />
+                <p class="results-metric-label mb-1">Dose de ataque (dias 1–14)</p>
+                <p class="results-metric-value-sm mb-2" id="resultado-a-ataque-valor">1 comp/día</p>
+                <div id="resultado-a-manutencao-bloco">
+                  <div class="results-metric-divider"></div>
+                  <p class="results-metric-label mb-1 mt-2">Manutenção (dia 15 -34)</p>
+                  <p class="results-metric-value-sm mb-0" id="resultado-a-manutencao-valor">0.5 comp/día</p>
+                </div>
+              </article>
+            </div>
+            <div class="col-12 col-md-4">
+              <article class="results-metric-card">
+                <img src="./icono-precio-competencia.svg" alt="" class="results-metric-icon results-metric-icon-sm" />
+                <p class="results-metric-label mb-1">Preço por dia</p>
+                <p class="results-metric-value-sm mb-2" id="resultado-a-preco-dia-promedio"
+                  data-default-value="R$ 10,235">R$ 10,235</p>
+              </article>
+            </div>
+            <div class="col-12 col-md-4">
+              <article class="results-metric-card">
+                <img src="./icono-costo-total-competencia.svg" alt=""
+                  class="results-metric-icon results-metric-icon-sm" />
+                <p class="results-metric-label mb-1">Custo total do tratamento</p>
+                <p class="results-metric-value-sm mb-0" id="resultado-a-custo-total" data-default-value="R$ 348,00">R$
+                  348,00</p>
+              </article>
+            </div>
+          </div>
+
+          <p class="results-competitor-note mb-0">
+            O Concorrente A exige dose de ataque de 1 comprimido/dia nos primeiros 14 dias, depois 0.5 comprimidos/dia
+            (manutenção).
+            <br />
+            O preço/dia exibido é a média ponderada do tratamento completo.
+          </p>
+          <input type="hidden" id="resultado-a-preco-dia-ataque" value="0" />
+          <input type="hidden" id="resultado-a-preco-dia-manutencao" value="0" />
+          <input type="hidden" id="resultado-a-total-ataque-hidden" value="0" />
+          <input type="hidden" id="resultado-a-total-manutencao-hidden" value="0" />
+        </div>
+      </div>
+      <img src="vs.svg" class="mb-2" id="results-vs-icon">
+    </section>
+
+    <section class="results-competitor-screen container-fluid is-hidden" id="results-concorrente-z">
+      <div class="results-shell">
+        <div class="results-competitor-card">
+          <div class="results-title-wrap d-flex align-items-center">
+
+            <h3 class="results-title mb-0"><img src="linea.svg"> Resultados</h3>
+          </div>
+
+          <h4 class="results-competitor-title">Concorrente Z – (ilunocitinib)</h4>
+
+          <div class="results-pills">
+            <p class="results-pill mb-0"><strong>Peso:</strong> <span id="resultado-z-peso">16kg</span></p>
+            <p class="results-pill mb-0"><strong>Comprimidos por día:</strong> <span id="resultado-z-comprimidos">1
+                comprimido/dia (d1–14) → 0.5 comprimidos/dia (d15+) - Apresentação: 16 mg</span></p>
+            <p class="results-pill mb-0"><strong>Duração do tratamento:</strong> <span id="resultado-z-duracao">34
+                dias</span></p>
+          </div>
+
+          <div class="results-metrics row g-3 pt-4">
+            <div class="col-12 col-md-4">
+              <article class="results-metric-card">
+                <img src="./icono-dosis-competencia.svg" alt="" class="results-metric-icon results-metric-icon-sm" />
+                <p class="results-metric-label mb-1">Dose por dia</p>
+                <p class="results-metric-value-sm mb-2" id="resultado-z-dia">1 comp/día</p>
+
+              </article>
+            </div>
+            <div class="col-12 col-md-4">
+              <article class="results-metric-card">
+                <img src="./icono-precio-competencia.svg" alt="" class="results-metric-icon results-metric-icon-sm" />
+                <p class="results-metric-label mb-1">Preço por dia</p>
+                <p class="results-metric-value-sm mb-2" id="resultado-z-preco-dia" data-default-value="R$ 10,235">R$
+                  10,235</p>
+              </article>
+            </div>
+            <div class="col-12 col-md-4">
+              <article class="results-metric-card">
+                <img src="./icono-costo-total-competencia.svg" alt=""
+                  class="results-metric-icon results-metric-icon-sm" />
+                <p class="results-metric-label mb-1">Custo total do tratamento</p>
+                <p class="results-metric-value-sm mb-0" id="resultado-z-custo-total" data-default-value="R$ 348,00">R$
+                  348,00</p>
+              </article>
+            </div>
+          </div>
+
+
+          <input type="hidden" id="resultado-z-preco-dia-ataque" value="0" />
+          <input type="hidden" id="resultado-z-preco-dia-manutencao" value="0" />
+          <input type="hidden" id="resultado-z-total-ataque-hidden" value="0" />
+          <input type="hidden" id="resultado-z-total-manutencao-hidden" value="0" />
+        </div>
+      </div>
+      <img src="vs.svg" class="mb-2" id="results-vs-icon">
+    </section>
+
+    <section class="results-screen container-fluid is-hidden" id="results-screen">
+      <div class="results-shell">
+        <div id="results-numelvi-logo"><img src="pastilla-numelvi-concorrente.svg"></div>
+
+        <div class="results-card">
+          <div class="results-title-wrap d-flex align-items-center">
+
+            <h3 class="results-title mb-0" id="results-title-numelvi"><img src="linea.svg"> Resultados
+            </h3>
+          </div>
+
+          <div class="results-product-block">
+            <div class="results-product-info">
+              <span class="mb-4" id="results-product-chip"><img src="pastilla-numelvi.svg" class="mb-2"></span>
+              <div class="results-pills">
+                <p class="results-pill mb-0" id="resultado-peso"><strong>Peso:</strong> <span id="resultado-peso-valor"
+                    data-default-value="16kg">16kg</span></p>
+                <p class="results-pill mb-0" id="resultado-comprimidos-apresentacao"
+                  data-default-value="0.5 comprimidos - Apresentação: 31.6 mg"><strong>Comprimidos por día:</strong>
+                  <span id="resultado-comprimidos-apresentacao-valor">0.5 comprimidos - Apresentação: 31.6 mg</span>
+                </p>
+                <p class="results-pill mb-0"><strong>Duração do tratamento:</strong> <span
+                    id="resultado-duracao-tratamento" data-default-value="34 dias">34 dias</span></p>
+              </div>
+            </div>
+            <div class="results-product-image-wrap">
+              <img src="./numelvi31mg.png" alt="Imagem do produto selecionado" class="results-product-image"
+                id="resultado-produto-imagem" data-default-src="./numelvi31mg.png" />
+            </div>
+          </div>
+
+          <div class="results-metrics row g-3">
+            <div class="col-12 col-md-4">
+              <article class="results-metric-card">
+                <img src="./icono-dosis.svg" alt="" class="results-metric-icon" />
+                <p class="results-metric-label mb-1">Dose por dia</p>
+                <p class="results-metric-value mb-0" id="resultado-dose-dia" data-default-value="0.5 comp/día">0.5
+                  comp/día</p>
+              </article>
+            </div>
+            <div class="col-12 col-md-4">
+              <article class="results-metric-card">
+                <img src="./icono-precio.svg" alt="" class="results-metric-icon" />
+                <p class="results-metric-label mb-1">Preço por dia</p>
+                <p class="results-metric-value mb-0" id="resultado-preco-dia" data-default-value="R$ 4,66">R$ 4,66</p>
+              </article>
+            </div>
+            <div class="col-12 col-md-4">
+              <article class="results-metric-card">
+                <img src="./icono-costo-total.svg" alt="" class="results-metric-icon" />
+                <p class="results-metric-label mb-1">Custo total do tratamento</p>
+                <p class="results-metric-value mb-0" id="resultado-custo-total" data-default-value="R$ 139,8">R$ 139,8
+                </p>
+              </article>
+            </div>
+          </div>
+
+          <div class="results-cta">
+            <p class="results-cta-text mb-0">
+              Quer saber mais sobre o Numelvi<span class="reg-mark-small">®</span>
+              e como ele pode beneficiar seus pacientes?
+            </p>
+            <a class="btn results-cta-button" href="https://www.msd-saude-animal.com.br/lista-de-distribuidores/"
+              target="_blank" rel="noreferrer">
+              Fale com um distribuidor
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+  </div>
+  <script>
+    (function () {
+      const produtoInput = document.getElementById("produto-input");
+      const produtoError = document.getElementById("produto-error");
+      const pesoInput = document.getElementById("peso-corporal");
+      const pesoError = document.getElementById("peso-error");
+      const pesoErrorText = document.getElementById("peso-error-text");
+      const duracaoInput = document.getElementById("duracao-input");
+      const duracaoError = document.getElementById("duracao-error");
+      const precoInputNumelvi = document.getElementById("preco-input-numelvi");
+      const precoErrorNumelvi = document.getElementById("preco-error-numelvi");
+      const precoInputConcorrenteA = document.getElementById("preco-input-concorrente-a");
+      const precoErrorConcorrenteA = document.getElementById("preco-error-concorrente-a");
+      const precoInputNumelviComparacao = document.getElementById("preco-input-numelvi-comparacao");
+      const precoErrorNumelviComparacao = document.getElementById("preco-error-numelvi-comparacao");
+      const precoInputConcorrenteZ = document.getElementById("preco-input-concorrente-z");
+      const precoErrorConcorrenteZ = document.getElementById("preco-error-concorrente-z");
+      const precoInputNumelviComparacaoZ = document.getElementById("preco-input-numelvi-comparacao-z");
+      const precoErrorNumelviComparacaoZ = document.getElementById("preco-error-numelvi-comparacao-z");
+      const calcularButton = document.querySelector(".calculate-btn");
+      const resultsBackButton = document.getElementById("results-back-btn");
+      const calculatorMain = document.getElementById("calculator-main");
+      const resultsConcorrenteAScreen = document.getElementById("results-concorrente-a");
+      const resultsConcorrenteZScreen = document.getElementById("results-concorrente-z");
+      const resultsScreen = document.getElementById("results-screen");
+      const resultsNumelviLogo = document.getElementById("results-numelvi-logo");
+      const resultsTitleNumelvi = document.getElementById("results-title-numelvi");
+      const resultsProductChip = document.getElementById("results-product-chip");
+      const precoRow = document.getElementById("preco-row");
+      const precoConConcorrenteARow = document.getElementById("preco-con-concorrente-a-row");
+      const precoConConcorrenteZRow = document.getElementById("preco-con-concorrente-z-row");
+      const resultadoProdutoImagem = document.getElementById("resultado-produto-imagem");
+      const resultadoDuracaoTratamento = document.getElementById("resultado-duracao-tratamento");
+      const resultadoPesoValor = document.getElementById("resultado-peso-valor");
+      const comprimidosDiaOutput = document.getElementById("comprimidos-dia-output");
+      const resultadoComprimidosApresentacao = document.getElementById("resultado-comprimidos-apresentacao");
+      const resultadoComprimidosApresentacaoValor = document.getElementById("resultado-comprimidos-apresentacao-valor");
+      const resultadoDoseDia = document.getElementById("resultado-dose-dia");
+      const resultadoPrecoDia = document.getElementById("resultado-preco-dia");
+      const resultadoCustoTotal = document.getElementById("resultado-custo-total");
+      const resultadoAPeso = document.getElementById("resultado-a-peso");
+      const resultadoZPeso = document.getElementById("resultado-z-peso");
+      const resultadoAComprimidos = document.getElementById("resultado-a-comprimidos");
+      const resultadoADuracao = document.getElementById("resultado-a-duracao");
+      const resultadoZDuracao = document.getElementById("resultado-z-duracao");
+      const resultadoZComprimidos = document.getElementById("resultado-z-comprimidos");
+      const resultadoAAtaqueValor = document.getElementById("resultado-a-ataque-valor");
+      const resultadoAManutencaoBloco = document.getElementById("resultado-a-manutencao-bloco");
+      const resultadoAManutencaoValor = document.getElementById("resultado-a-manutencao-valor");
+      const resultadoAPrecoDiaAtaqueHidden = document.getElementById("resultado-a-preco-dia-ataque");
+      const resultadoAPrecoDiaManutencaoHidden = document.getElementById("resultado-a-preco-dia-manutencao");
+      const resultadoAPrecoDiaPromedio = document.getElementById("resultado-a-preco-dia-promedio");
+      const resultadoACustoTotal = document.getElementById("resultado-a-custo-total");
+      const resultadoATotalAtaqueHidden = document.getElementById("resultado-a-total-ataque-hidden");
+      const resultadoATotalManutencaoHidden = document.getElementById("resultado-a-total-manutencao-hidden");
+      const resultadoZDia = document.getElementById("resultado-z-dia");
+      const resultadoZPrecoDia = document.getElementById("resultado-z-preco-dia");
+      const resultadoZCustoTotal = document.getElementById("resultado-z-custo-total");
+
+      if (
+        !produtoInput || !produtoError || !pesoInput || !pesoError || !pesoErrorText || !duracaoInput || !duracaoError
+        || !precoInputNumelvi || !precoErrorNumelvi || !precoInputConcorrenteA || !precoErrorConcorrenteA
+        || !precoInputNumelviComparacao || !precoErrorNumelviComparacao
+        || !precoInputConcorrenteZ || !precoErrorConcorrenteZ
+        || !precoInputNumelviComparacaoZ || !precoErrorNumelviComparacaoZ
+      ) return;
+
+      const tabelaDosificacaoNumelvi = [
+        { min: 3, max: 4.3, comprimidosDia: 0.5, apresentacaoMg: 7.2 },
+        { min: 4.4, max: 6, comprimidosDia: 1, apresentacaoMg: 4.8 },
+        { min: 6.1, max: 9, comprimidosDia: 1, apresentacaoMg: 7.2 },
+        { min: 9.1, max: 13.5, comprimidosDia: 0.5, apresentacaoMg: 21.6 },
+        { min: 13.6, max: 19.3, comprimidosDia: 0.5, apresentacaoMg: 31.6 },
+        { min: 19.4, max: 26.5, comprimidosDia: 1, apresentacaoMg: 21.6 },
+        { min: 26.6, max: 39.5, comprimidosDia: 1, apresentacaoMg: 31.6 },
+        { min: 39.6, max: 54, comprimidosDia: 1.5, apresentacaoMg: 31.6 },
+        { min: 54.1, max: 79, comprimidosDia: 2, apresentacaoMg: 31.6 },
+      ];
+
+      const tabelaDosificacaoConcorrenteA = [
+        { min: 3, max: 4.4, comprimidosDia: 0.5, apresentacaoMg: 3.6 },
+        { min: 4.5, max: 5.9, comprimidosDia: 0.5, apresentacaoMg: 5.4 },
+        { min: 6.0, max: 8.9, comprimidosDia: 1, apresentacaoMg: 3.6 },
+        { min: 9.0, max: 13.4, comprimidosDia: 1, apresentacaoMg: 5.4 },
+        { min: 13.5, max: 19.9, comprimidosDia: 0.5, apresentacaoMg: 16 },
+        { min: 20.0, max: 26.9, comprimidosDia: 2, apresentacaoMg: 5.4 },
+        { min: 27.0, max: 39.9, comprimidosDia: 1, apresentacaoMg: 16 },
+        { min: 40.0, max: 54.9, comprimidosDia: 1.5, apresentacaoMg: 16 },
+        { min: 55.0, max: 80.0, comprimidosDia: 2, apresentacaoMg: 16 },
+      ];
+
+      const tabelaDosificacaoConcorrenteZ = [
+        { min: 3.0, max: 4.0, comprimidosDia: 0.5, apresentacaoMg: 4.8 },
+        { min: 4.1, max: 5.3, comprimidosDia: 0.5, apresentacaoMg: 6.4 },
+        { min: 5.4, max: 6.5, comprimidosDia: 0.5, apresentacaoMg: 8.5 },
+        { min: 6.6, max: 8.0, comprimidosDia: 1, apresentacaoMg: 4.8 },
+        { min: 8.1, max: 10.6, comprimidosDia: 1, apresentacaoMg: 6.4 },
+        { min: 10.7, max: 14.1, comprimidosDia: 1, apresentacaoMg: 8.5 },
+        { min: 14.2, max: 16.0, comprimidosDia: 1.5, apresentacaoMg: 6.4 },
+        { min: 16.1, max: 19.5, comprimidosDia: 1.5, apresentacaoMg: 8.5 },
+        { min: 19.6, max: 24.9, comprimidosDia: 1, apresentacaoMg: 15.0 },
+        { min: 25.0, max: 28.3, comprimidosDia: 2, apresentacaoMg: 8.5 },
+        { min: 28.4, max: 37.4, comprimidosDia: 1.5, apresentacaoMg: 15.0 },
+        { min: 37.5, max: 49.9, comprimidosDia: 2, apresentacaoMg: 15.0 },
+        { min: 50.0, max: 62.4, comprimidosDia: 2.5, apresentacaoMg: 15.0 },
+        { min: 62.5, max: 74.9, comprimidosDia: 3, apresentacaoMg: 15.0 },
+      ];
+
+      function toggleError(errorElement, shouldShow) {
+        errorElement.classList.toggle("is-hidden", !shouldShow);
+      }
+
+      function toggleInputError(inputElement, shouldShow) {
+        const formBlock = inputElement.closest(".form-block");
+        if (!formBlock) return;
+        const inputWrapper = formBlock.querySelector(".custom-input");
+        if (!inputWrapper) return;
+        inputWrapper.classList.toggle("input-error", shouldShow);
+      }
+
+      function validateRequired(inputElement, errorElement) {
+        const hasValue = inputElement.value.trim() !== "";
+        const shouldShowError = !hasValue;
+        toggleError(errorElement, shouldShowError);
+        toggleInputError(inputElement, shouldShowError);
+        return hasValue;
+      }
+
+      function validatePeso() {
+        const value = parseFloat(pesoInput.value);
+        const hasValue = pesoInput.value.trim() !== "";
+        let isInvalid = false;
+
+        if (!hasValue) {
+          pesoErrorText.textContent = "Informe o peso do animal para continuar.";
+          isInvalid = true;
+        } else if (!Number.isNaN(value) && value < 3) {
+          pesoErrorText.textContent = "Peso mínimo: 3 kg. Produto não indicado para cães abaixo de 3 kg. Max – 79kgs";
+          isInvalid = true;
+        } else if (!Number.isNaN(value) && value > 79) {
+          pesoErrorText.textContent = "Peso máximo: 79 kg.";
+          isInvalid = true;
+        }
+
+        toggleError(pesoError, isInvalid);
+        toggleInputError(pesoInput, isInvalid);
+        return !isInvalid;
+      }
+
+      function validateAllFields() {
+        const isProdutoValid = validateRequired(produtoInput, produtoError);
+        const isPesoValid = validatePeso();
+        const isDuracaoValid = validateRequired(duracaoInput, duracaoError);
+        const isPrecoRowVisible = !precoRow.classList.contains("is-hidden");
+        const isPrecoConcorrenteARowVisible = !precoConConcorrenteARow.classList.contains("is-hidden");
+        const isPrecoConcorrenteZRowVisible = !precoConConcorrenteZRow.classList.contains("is-hidden");
+
+        let isPrecoValid = false;
+        if (isPrecoConcorrenteARowVisible) {
+          const isPrecoConcorrenteValid = validateRequired(precoInputConcorrenteA, precoErrorConcorrenteA);
+          const isPrecoNumelviComparacaoValid = validateRequired(precoInputNumelviComparacao, precoErrorNumelviComparacao);
+          isPrecoValid = isPrecoConcorrenteValid && isPrecoNumelviComparacaoValid;
+        } else if (isPrecoConcorrenteZRowVisible) {
+          const isPrecoConcorrenteZValid = validateRequired(precoInputConcorrenteZ, precoErrorConcorrenteZ);
+          const isPrecoNumelviComparacaoZValid = validateRequired(precoInputNumelviComparacaoZ, precoErrorNumelviComparacaoZ);
+          isPrecoValid = isPrecoConcorrenteZValid && isPrecoNumelviComparacaoZValid;
+        } else if (isPrecoRowVisible) {
+          isPrecoValid = validateRequired(precoInputNumelvi, precoErrorNumelvi);
+        } else {
+          isPrecoValid = false;
+        }
+
+        return isProdutoValid && isPesoValid && isDuracaoValid && isPrecoValid;
+      }
+
+      function isFormReadyToCalculate() {
+        const produtoValue = produtoInput.value.trim();
+        const pesoValue = parseFloat(pesoInput.value.replace(",", "."));
+        const duracaoValue = duracaoInput.value.trim();
+        const precoNumelviValue = precoInputNumelvi.value.trim();
+        const precoConcorrenteAValue = precoInputConcorrenteA.value.trim();
+        const precoNumelviComparacaoValue = precoInputNumelviComparacao.value.trim();
+        const precoConcorrenteZValue = precoInputConcorrenteZ.value.trim();
+        const precoNumelviComparacaoZValue = precoInputNumelviComparacaoZ.value.trim();
+        const isPrecoRowVisible = !precoRow.classList.contains("is-hidden");
+        const isPrecoConcorrenteARowVisible = !precoConConcorrenteARow.classList.contains("is-hidden");
+        const isPrecoConcorrenteZRowVisible = !precoConConcorrenteZRow.classList.contains("is-hidden");
+
+        if (!produtoValue || !duracaoValue || Number.isNaN(pesoValue)) {
+          return false;
+        }
+
+        if (isPrecoConcorrenteARowVisible) {
+          if (!precoConcorrenteAValue || !precoNumelviComparacaoValue) return false;
+        } else if (isPrecoConcorrenteZRowVisible) {
+          if (!precoConcorrenteZValue || !precoNumelviComparacaoZValue) return false;
+        } else if (isPrecoRowVisible) {
+          if (!precoNumelviValue) return false;
+        } else {
+          return false;
+        }
+
+        return pesoValue >= 3 && pesoValue <= 79;
+      }
+
+      function updateCalculateButtonState() {
+        if (!calcularButton) return;
+        calcularButton.disabled = !isFormReadyToCalculate();
+      }
+
+      function updatePrecoRowsByProduto() {
+        if (!precoRow || !precoConConcorrenteARow || !precoConConcorrenteZRow) return;
+        const produtoSelecionado = produtoInput.value;
+
+        if (produtoSelecionado === "concorrente-z") {
+          precoRow.classList.add("is-hidden");
+          precoConConcorrenteARow.classList.add("is-hidden");
+          precoConConcorrenteZRow.classList.remove("is-hidden");
+          return;
+        }
+
+        if (produtoSelecionado === "numelvi") {
+          precoRow.classList.remove("is-hidden");
+          precoConConcorrenteARow.classList.add("is-hidden");
+          precoConConcorrenteZRow.classList.add("is-hidden");
+          return;
+        }
+
+        if (produtoSelecionado === "concorrente-a") {
+          precoRow.classList.add("is-hidden");
+          precoConConcorrenteARow.classList.remove("is-hidden");
+          precoConConcorrenteZRow.classList.add("is-hidden");
+          return;
+        }
+
+        precoRow.classList.remove("is-hidden");
+        precoConConcorrenteARow.classList.add("is-hidden");
+        precoConConcorrenteZRow.classList.add("is-hidden");
+      }
+
+      function updateNumelviResultsHeaderVisibility() {
+        const produtoSelecionado = produtoInput.value;
+        const isConcorrente = ["concorrente-a", "concorrente-b", "concorrente-z"].includes(produtoSelecionado);
+        const isNumelvi = produtoSelecionado === "numelvi";
+
+        if (resultsNumelviLogo) {
+          resultsNumelviLogo.classList.toggle("is-hidden", !isConcorrente);
+        }
+        if (resultsTitleNumelvi) {
+          resultsTitleNumelvi.classList.toggle("is-hidden", isConcorrente);
+        }
+        if (resultsProductChip) {
+          resultsProductChip.classList.toggle("is-hidden", !isNumelvi);
+        }
+      }
+
+      function updateResultadoDuracaoTratamento() {
+        if (!resultadoDuracaoTratamento) return;
+        const defaultValue = resultadoDuracaoTratamento.dataset.defaultValue || "34 dias";
+        const value = duracaoInput.value.trim();
+        const duracaoTexto = value ? `${value} dias` : defaultValue;
+        resultadoDuracaoTratamento.textContent = duracaoTexto;
+        if (resultadoADuracao) {
+          resultadoADuracao.textContent = duracaoTexto;
+        }
+        if (resultadoZDuracao) {
+          resultadoZDuracao.textContent = duracaoTexto;
+        }
+      }
+
+      function updateConcorrenteAManutencaoVisibility() {
+        if (!resultadoAManutencaoBloco) return;
+        const duracaoValue = parseInt(duracaoInput.value, 10);
+        const shouldHide = !Number.isNaN(duracaoValue) && duracaoValue <= 14;
+        resultadoAManutencaoBloco.classList.toggle("is-hidden", shouldHide);
+      }
+
+      function updateResultadoPeso() {
+        if (!resultadoPesoValor) return;
+        const defaultValue = resultadoPesoValor.dataset.defaultValue || "16kg";
+        const value = pesoInput.value.trim();
+        const pesoTexto = value ? `${value.replace(".", ",")}kg` : defaultValue;
+        resultadoPesoValor.textContent = pesoTexto;
+        if (resultadoAPeso) {
+          resultadoAPeso.textContent = pesoTexto;
+        }
+        if (resultadoZPeso) {
+          resultadoZPeso.textContent = pesoTexto;
+        }
+      }
+
+      function updateResultadoPrecoDia() {
+        if (!resultadoPrecoDia) return;
+        const defaultValue = resultadoPrecoDia.dataset.defaultValue || "R$ 4,66";
+        const produtoSelecionado = produtoInput.value;
+        const precoBase = produtoSelecionado === "concorrente-a"
+          ? precoInputNumelviComparacao.value
+          : produtoSelecionado === "concorrente-z"
+            ? precoInputNumelviComparacaoZ.value
+            : precoInputNumelvi.value;
+        const precoValue = parseFloat(precoBase.replace(",", "."));
+
+        if (Number.isNaN(precoValue)) {
+          resultadoPrecoDia.textContent = defaultValue;
+          return;
+        }
+
+        const precoPorDia = precoValue / 30;
+        const precoFormatado = precoPorDia.toFixed(2).replace(".", ",");
+        resultadoPrecoDia.textContent = `R$ ${precoFormatado}`;
+      }
+
+      function updateResultadoCustoTotal() {
+        if (!resultadoCustoTotal || !resultadoPrecoDia) return;
+        const defaultValue = resultadoCustoTotal.dataset.defaultValue || "R$ 139,8";
+        const precoDiaTexto = resultadoPrecoDia.textContent.replace("R$", "").trim().replace(",", ".");
+        const precoDiaValor = parseFloat(precoDiaTexto);
+        const duracaoValor = parseFloat(duracaoInput.value.replace(",", "."));
+
+        if (Number.isNaN(precoDiaValor) || Number.isNaN(duracaoValor)) {
+          resultadoCustoTotal.textContent = defaultValue;
+          return;
+        }
+
+        const custoTotal = precoDiaValor * duracaoValor;
+        resultadoCustoTotal.textContent = `R$ ${custoTotal.toFixed(2).replace(".", ",")}`;
+      }
+
+      function applyProdutoImagemWithFallback(candidates, altText) {
+        if (!resultadoProdutoImagem || !candidates || candidates.length === 0) return;
+        let currentIndex = 0;
+
+        resultadoProdutoImagem.onerror = function () {
+          currentIndex += 1;
+          if (currentIndex < candidates.length) {
+            resultadoProdutoImagem.src = candidates[currentIndex];
+            return;
+          }
+
+          const defaultSrc = resultadoProdutoImagem.dataset.defaultSrc;
+          if (defaultSrc) {
+            resultadoProdutoImagem.onerror = null;
+            resultadoProdutoImagem.src = defaultSrc;
+          }
+        };
+
+        resultadoProdutoImagem.src = candidates[currentIndex];
+        if (altText) {
+          resultadoProdutoImagem.alt = altText;
+        }
+      }
+
+      function updateResultadoProdutoImagemPorApresentacao() {
+        if (!resultadoComprimidosApresentacaoValor || !resultadoProdutoImagem) return;
+        const apresentacaoTexto = resultadoComprimidosApresentacaoValor.textContent;
+        let imageCandidates = [];
+        let altText = "Imagem do produto selecionado";
+
+        if (apresentacaoTexto.includes("4,8 mg")) {
+          imageCandidates = ["./numelv4mg.png", "./numelvi4mg.png"];
+          altText = "Numelvi 4.8mg";
+        } else if (apresentacaoTexto.includes("7,2 mg")) {
+          imageCandidates = ["./numelv7mg.png", "./numelvi7mg.png"];
+          altText = "Numelvi 7.2mg";
+        } else if (apresentacaoTexto.includes("21,6 mg")) {
+          imageCandidates = ["./numelv21mg.png", "./numelvi21mg.png"];
+          altText = "Numelvi 21.6mg";
+        } else if (apresentacaoTexto.includes("31,6 mg")) {
+          imageCandidates = ["./numelv31mg.png", "./numelvi31mg.png"];
+          altText = "Numelvi 31.6mg";
+        } else {
+          const defaultSrc = resultadoProdutoImagem.dataset.defaultSrc;
+          if (defaultSrc) {
+            resultadoProdutoImagem.onerror = null;
+            resultadoProdutoImagem.src = defaultSrc;
+          }
+          return;
+        }
+
+        applyProdutoImagemWithFallback(imageCandidates, altText);
+      }
+
+      function formatNumero(value) {
+        return String(value).replace(".", ",");
+      }
+
+      function formatComprimidosPorDia(qtd) {
+        const valor = formatNumero(qtd);
+        const label = qtd === 1 ? "comprimido/dia" : "comprimidos/dia";
+        return `${valor} ${label}`;
+      }
+
+      function updateResultadoConcorrenteAAtaque(doseBase) {
+        if (!resultadoAAtaqueValor) return;
+        const doseAtaque = doseBase * 2;
+        resultadoAAtaqueValor.textContent = formatComprimidosPorDia(doseAtaque);
+      }
+
+      function updateResultadoConcorrenteAManutencao(doseBase) {
+        if (!resultadoAManutencaoValor) return;
+        resultadoAManutencaoValor.textContent = formatComprimidosPorDia(doseBase);
+      }
+
+      function updateResultadoConcorrenteAPrecoDia(doseBase) {
+        if (!resultadoAPrecoDiaPromedio) return;
+        const defaultValue = resultadoAPrecoDiaPromedio.dataset.defaultValue || "R$ 10,235";
+        const precoCaixaConcorrente = parseFloat(precoInputConcorrenteA.value.replace(",", "."));
+        const duracao = parseInt(duracaoInput.value, 10);
+
+        if (Number.isNaN(precoCaixaConcorrente)) {
+          resultadoAPrecoDiaPromedio.textContent = defaultValue;
+          if (resultadoAPrecoDiaAtaqueHidden) {
+            resultadoAPrecoDiaAtaqueHidden.value = "0";
+          }
+          if (resultadoAPrecoDiaManutencaoHidden) {
+            resultadoAPrecoDiaManutencaoHidden.value = "0";
+          }
+          if (resultadoATotalAtaqueHidden) {
+            resultadoATotalAtaqueHidden.value = "0";
+          }
+          if (resultadoATotalManutencaoHidden) {
+            resultadoATotalManutencaoHidden.value = "0";
+          }
+          return;
+        }
+
+        const valorPorDose = precoCaixaConcorrente / 20;
+        const diasAtaque = Number.isNaN(duracao) || duracao <= 0 ? 0 : Math.min(duracao, 14);
+        const diasManutencao = Number.isNaN(duracao) || duracao <= 14 ? 0 : duracao - 14;
+        const doseAtaqueDia = doseBase * 2;
+        const precoDiaAtaque = valorPorDose * doseAtaqueDia;
+        const precoDiaManutencao = valorPorDose * doseBase;
+
+        if (resultadoAPrecoDiaAtaqueHidden) {
+          resultadoAPrecoDiaAtaqueHidden.value = precoDiaAtaque.toFixed(4);
+        }
+        if (resultadoAPrecoDiaManutencaoHidden) {
+          resultadoAPrecoDiaManutencaoHidden.value = precoDiaManutencao.toFixed(4);
+        }
+
+        if (Number.isNaN(duracao) || duracao <= 0) {
+          resultadoAPrecoDiaPromedio.textContent = defaultValue;
+        }
+        if (resultadoATotalAtaqueHidden) {
+          const totalAtaque = diasAtaque * doseAtaqueDia * valorPorDose;
+          resultadoATotalAtaqueHidden.value = totalAtaque.toFixed(4);
+        }
+        if (resultadoATotalManutencaoHidden) {
+          const totalManutencao = diasManutencao * doseBase * valorPorDose;
+          resultadoATotalManutencaoHidden.value = totalManutencao.toFixed(4);
+        }
+      }
+
+      function updateResultadoConcorrenteACustoTotal() {
+        if (!resultadoACustoTotal) return;
+        const defaultValue = resultadoACustoTotal.dataset.defaultValue || "R$ 348,00";
+        const totalAtaque = parseFloat((resultadoATotalAtaqueHidden?.value || "0").replace(",", "."));
+        const totalManutencao = parseFloat((resultadoATotalManutencaoHidden?.value || "0").replace(",", "."));
+        const duracaoValor = parseFloat(duracaoInput.value.replace(",", "."));
+
+        if (Number.isNaN(totalAtaque) || Number.isNaN(totalManutencao)) {
+          resultadoACustoTotal.textContent = defaultValue;
+          if (resultadoAPrecoDiaPromedio) {
+            resultadoAPrecoDiaPromedio.textContent =
+              resultadoAPrecoDiaPromedio.dataset.defaultValue || "R$ 10,235";
+          }
+          return;
+        }
+
+        const custoTotal = totalAtaque + totalManutencao;
+        resultadoACustoTotal.textContent = `R$ ${custoTotal.toFixed(2).replace(".", ",")}`;
+        if (resultadoAPrecoDiaPromedio) {
+          if (Number.isNaN(duracaoValor) || duracaoValor <= 0) {
+            resultadoAPrecoDiaPromedio.textContent =
+              resultadoAPrecoDiaPromedio.dataset.defaultValue || "R$ 10,235";
+          } else {
+            const promedio = custoTotal / duracaoValor;
+            resultadoAPrecoDiaPromedio.textContent = `R$ ${promedio.toFixed(3).replace(".", ",")}`;
+          }
+        }
+      }
+
+      function updateComprimidosPorDia() {
+        if (!comprimidosDiaOutput || !resultadoComprimidosApresentacao || !resultadoComprimidosApresentacaoValor) return;
+
+        const defaultComprimidos = comprimidosDiaOutput.dataset.defaultValue || "Calculado automaticamente";
+        const defaultResultado = resultadoComprimidosApresentacao.dataset.defaultValue || "0.5 comprimidos - Apresentação: 31.6 mg";
+        const defaultDoseDia = resultadoDoseDia?.dataset.defaultValue || "0.5 comp/día";
+        const defaultConcorrenteA =
+          "1 comprimido/dia (d1–14) → 0.5 comprimidos/dia (d15+) - Apresentação: 16 mg";
+        const pesoValue = parseFloat(pesoInput.value.replace(",", "."));
+        const produtoSelecionado = produtoInput.value || "numelvi";
+
+        if (produtoSelecionado === "concorrente-a") {
+          if (Number.isNaN(pesoValue)) {
+            comprimidosDiaOutput.textContent = defaultComprimidos;
+            if (resultadoAComprimidos) {
+              resultadoAComprimidos.textContent = defaultConcorrenteA;
+            }
+            if (resultadoAAtaqueValor) {
+              resultadoAAtaqueValor.textContent = "1 comp/día";
+            }
+            if (resultadoAManutencaoValor) {
+              resultadoAManutencaoValor.textContent = "0.5 comp/día";
+            }
+            if (resultadoAPrecoDiaPromedio) {
+              resultadoAPrecoDiaPromedio.textContent =
+                resultadoAPrecoDiaPromedio.dataset.defaultValue || "R$ 10,235";
+            }
+            updateResultadoConcorrenteACustoTotal();
+            return;
+          }
+
+          const doseConcorrente = tabelaDosificacaoConcorrenteA.find((item) => pesoValue >= item.min && pesoValue <= item.max);
+          if (!doseConcorrente) {
+            comprimidosDiaOutput.textContent = defaultComprimidos;
+            if (resultadoAComprimidos) {
+              resultadoAComprimidos.textContent = defaultConcorrenteA;
+            }
+            if (resultadoAAtaqueValor) {
+              resultadoAAtaqueValor.textContent = "1 comp/día";
+            }
+            if (resultadoAManutencaoValor) {
+              resultadoAManutencaoValor.textContent = "0.5 comp/día";
+            }
+            if (resultadoAPrecoDiaPromedio) {
+              resultadoAPrecoDiaPromedio.textContent =
+                resultadoAPrecoDiaPromedio.dataset.defaultValue || "R$ 10,235";
+            }
+            updateResultadoConcorrenteACustoTotal();
+            return;
+          }
+
+          const comprimidosTexto = formatComprimidosPorDia(doseConcorrente.comprimidosDia);
+          const apresentacaoTexto = `${formatNumero(doseConcorrente.apresentacaoMg)} mg`;
+          const outputText = `${comprimidosTexto} - Apresentação: ${apresentacaoTexto}`;
+          comprimidosDiaOutput.textContent = outputText;
+          if (resultadoAComprimidos) {
+            resultadoAComprimidos.textContent = outputText;
+          }
+          updateResultadoConcorrenteAAtaque(doseConcorrente.comprimidosDia);
+          updateResultadoConcorrenteAManutencao(doseConcorrente.comprimidosDia);
+          updateResultadoConcorrenteAPrecoDia(doseConcorrente.comprimidosDia);
+          updateResultadoConcorrenteACustoTotal();
+          return;
+        }
+
+        if (produtoSelecionado === "concorrente-z") {
+          const defaultConcorrenteZ =
+            "1 comprimido/dia - Apresentação: 8.5 mg";
+
+          if (Number.isNaN(pesoValue)) {
+            comprimidosDiaOutput.textContent = defaultComprimidos;
+            if (resultadoZComprimidos) {
+              resultadoZComprimidos.textContent = defaultConcorrenteZ;
+            }
+            return;
+          }
+
+          const doseZ = tabelaDosificacaoConcorrenteZ.find((item) => pesoValue >= item.min && pesoValue <= item.max);
+          if (!doseZ) {
+            comprimidosDiaOutput.textContent = defaultComprimidos;
+            if (resultadoZComprimidos) {
+              resultadoZComprimidos.textContent = defaultConcorrenteZ;
+            }
+            return;
+          }
+
+          const comprimidosTexto = formatComprimidosPorDia(doseZ.comprimidosDia);
+          const apresentacaoTexto = `${formatNumero(doseZ.apresentacaoMg)} mg`;
+          const outputText = `${comprimidosTexto} - Apresentação: ${apresentacaoTexto}`;
+          comprimidosDiaOutput.textContent = outputText;
+          if (resultadoZComprimidos) {
+            resultadoZComprimidos.textContent = outputText;
+          }
+          return;
+        }
+
+        if (produtoSelecionado !== "numelvi" || Number.isNaN(pesoValue)) {
+          comprimidosDiaOutput.textContent = defaultComprimidos;
+          resultadoComprimidosApresentacaoValor.textContent = defaultResultado;
+          if (resultadoDoseDia) resultadoDoseDia.textContent = defaultDoseDia;
+          updateResultadoProdutoImagemPorApresentacao();
+          return;
+        }
+
+        const doseEncontrada = tabelaDosificacaoNumelvi.find((item) => pesoValue >= item.min && pesoValue <= item.max);
+
+        if (!doseEncontrada) {
+          comprimidosDiaOutput.textContent = defaultComprimidos;
+          resultadoComprimidosApresentacaoValor.textContent = defaultResultado;
+          if (resultadoDoseDia) resultadoDoseDia.textContent = defaultDoseDia;
+          updateResultadoProdutoImagemPorApresentacao();
+          return;
+        }
+
+        const comprimidosTexto = `${formatNumero(doseEncontrada.comprimidosDia)} comprimidos`;
+        const apresentacaoTexto = `${formatNumero(doseEncontrada.apresentacaoMg)} mg`;
+
+        comprimidosDiaOutput.textContent = `${comprimidosTexto} - Apresentação: ${apresentacaoTexto}`;
+        resultadoComprimidosApresentacaoValor.textContent = `${comprimidosTexto} - Apresentação: ${apresentacaoTexto}`;
+        if (resultadoDoseDia) {
+          resultadoDoseDia.textContent = `${formatNumero(doseEncontrada.comprimidosDia)} comp/día`;
+        }
+        updateResultadoProdutoImagemPorApresentacao();
+      }
+
+      function updateResultadoNumelviComparacao() {
+        if (!resultadoComprimidosApresentacaoValor || !resultadoDoseDia) return;
+        const defaultResultado =
+          resultadoComprimidosApresentacao.dataset.defaultValue || "0.5 comprimidos - Apresentação: 31.6 mg";
+        const defaultDoseDia = resultadoDoseDia.dataset.defaultValue || "0.5 comp/día";
+        const pesoValue = parseFloat(pesoInput.value.replace(",", "."));
+
+        if (Number.isNaN(pesoValue)) {
+          resultadoComprimidosApresentacaoValor.textContent = defaultResultado;
+          resultadoDoseDia.textContent = defaultDoseDia;
+          updateResultadoProdutoImagemPorApresentacao();
+          return;
+        }
+
+        const doseNumelvi = tabelaDosificacaoNumelvi.find((item) => pesoValue >= item.min && pesoValue <= item.max);
+
+        if (!doseNumelvi) {
+          resultadoComprimidosApresentacaoValor.textContent = defaultResultado;
+          resultadoDoseDia.textContent = defaultDoseDia;
+          updateResultadoProdutoImagemPorApresentacao();
+          return;
+        }
+
+        const comprimidosTexto = `${formatNumero(doseNumelvi.comprimidosDia)} comprimidos`;
+        const apresentacaoTexto = `${formatNumero(doseNumelvi.apresentacaoMg)} mg`;
+        resultadoComprimidosApresentacaoValor.textContent = `${comprimidosTexto} - Apresentação: ${apresentacaoTexto}`;
+        resultadoDoseDia.textContent = `${formatNumero(doseNumelvi.comprimidosDia)} comp/día`;
+        updateResultadoProdutoImagemPorApresentacao();
+      }
+
+      function updateResultadoConcorrenteZ() {
+        if (!resultadoZDia) return;
+        const defaultValue = "1 comp/día";
+        const pesoValue = parseFloat(pesoInput.value.replace(",", "."));
+
+        if (Number.isNaN(pesoValue)) {
+          resultadoZDia.textContent = defaultValue;
+          return;
+        }
+
+        const doseZ = tabelaDosificacaoConcorrenteZ.find((item) => pesoValue >= item.min && pesoValue <= item.max);
+        if (!doseZ) {
+          resultadoZDia.textContent = defaultValue;
+          return;
+        }
+
+        resultadoZDia.textContent = formatComprimidosPorDia(doseZ.comprimidosDia);
+      }
+
+      function updateResultadoConcorrenteZPrecoDia() {
+        if (!resultadoZPrecoDia) return;
+        const defaultValue = resultadoZPrecoDia.dataset.defaultValue || "R$ 10,235";
+        const precoConcorrente = parseFloat(precoInputConcorrenteZ.value.replace(",", "."));
+
+        if (Number.isNaN(precoConcorrente)) {
+          resultadoZPrecoDia.textContent = defaultValue;
+          return;
+        }
+
+        const precoDia = precoConcorrente / 30;
+        resultadoZPrecoDia.textContent = `R$ ${precoDia.toFixed(3).replace(".", ",")}`;
+      }
+
+      function updateResultadoConcorrenteZCustoTotal() {
+        if (!resultadoZCustoTotal || !resultadoZPrecoDia || !resultadoZDuracao) return;
+        const defaultValue = resultadoZCustoTotal.dataset.defaultValue || "R$ 348,00";
+        const precoDiaTexto = resultadoZPrecoDia.textContent.replace("R$", "").trim().replace(",", ".");
+        const precoDiaValor = parseFloat(precoDiaTexto);
+        const duracaoTexto = resultadoZDuracao.textContent.replace("dias", "").trim().replace(",", ".");
+        const duracaoValor = parseFloat(duracaoTexto);
+
+        if (Number.isNaN(precoDiaValor) || Number.isNaN(duracaoValor)) {
+          resultadoZCustoTotal.textContent = defaultValue;
+          return;
+        }
+
+        const custoTotal = precoDiaValor * duracaoValor;
+        resultadoZCustoTotal.textContent = `R$ ${custoTotal.toFixed(2).replace(".", ",")}`;
+      }
+
+      produtoInput.addEventListener("input", () => {
+        validateRequired(produtoInput, produtoError);
+        updatePrecoRowsByProduto();
+        updateNumelviResultsHeaderVisibility();
+        updateComprimidosPorDia();
+        updateResultadoConcorrenteZ();
+        updateResultadoConcorrenteZPrecoDia();
+        updateResultadoConcorrenteZCustoTotal();
+        updateCalculateButtonState();
+      });
+      produtoInput.addEventListener("change", () => {
+        validateRequired(produtoInput, produtoError);
+        updatePrecoRowsByProduto();
+        updateNumelviResultsHeaderVisibility();
+        updateComprimidosPorDia();
+        updateResultadoConcorrenteZ();
+        updateResultadoConcorrenteZPrecoDia();
+        updateResultadoConcorrenteZCustoTotal();
+        updateCalculateButtonState();
+      });
+      produtoInput.addEventListener("blur", () => {
+        validateRequired(produtoInput, produtoError);
+        updatePrecoRowsByProduto();
+        updateNumelviResultsHeaderVisibility();
+        updateComprimidosPorDia();
+        updateResultadoConcorrenteZ();
+        updateCalculateButtonState();
+      });
+      pesoInput.addEventListener("input", () => {
+        let sanitizedValue = pesoInput.value.replace(/[^0-9.,]/g, "");
+        const firstSeparatorIndex = sanitizedValue.search(/[.,]/);
+
+        if (firstSeparatorIndex !== -1) {
+          const integerPart = sanitizedValue.slice(0, firstSeparatorIndex + 1);
+          const decimalPart = sanitizedValue.slice(firstSeparatorIndex + 1).replace(/[.,]/g, "");
+          sanitizedValue = integerPart + decimalPart;
+        }
+
+        pesoInput.value = sanitizedValue;
+        validatePeso();
+        updateComprimidosPorDia();
+        updateResultadoConcorrenteZ();
+        updateResultadoConcorrenteZPrecoDia();
+        updateResultadoConcorrenteZCustoTotal();
+        updateResultadoPeso();
+        updateCalculateButtonState();
+      });
+      pesoInput.addEventListener("blur", () => {
+        validatePeso();
+        updateComprimidosPorDia();
+        updateResultadoConcorrenteZ();
+        updateResultadoConcorrenteZPrecoDia();
+        updateResultadoConcorrenteZCustoTotal();
+        updateResultadoPeso();
+        updateCalculateButtonState();
+      });
+      pesoInput.addEventListener("paste", (event) => {
+        event.preventDefault();
+        const pastedText = (event.clipboardData || window.clipboardData).getData("text");
+        let sanitizedValue = pastedText.replace(/[^0-9.,]/g, "");
+        const firstSeparatorIndex = sanitizedValue.search(/[.,]/);
+
+        if (firstSeparatorIndex !== -1) {
+          const integerPart = sanitizedValue.slice(0, firstSeparatorIndex + 1);
+          const decimalPart = sanitizedValue.slice(firstSeparatorIndex + 1).replace(/[.,]/g, "");
+          sanitizedValue = integerPart + decimalPart;
+        }
+
+        pesoInput.value = sanitizedValue;
+        validatePeso();
+        updateComprimidosPorDia();
+        updateResultadoConcorrenteZ();
+        updateResultadoConcorrenteZPrecoDia();
+        updateResultadoConcorrenteZCustoTotal();
+        updateResultadoPeso();
+        updateCalculateButtonState();
+      });
+      duracaoInput.addEventListener("input", () => {
+        duracaoInput.value = duracaoInput.value.replace(/\D/g, "");
+        validateRequired(duracaoInput, duracaoError);
+        updateComprimidosPorDia();
+        updateResultadoDuracaoTratamento();
+        updateResultadoCustoTotal();
+        updateConcorrenteAManutencaoVisibility();
+        updateResultadoConcorrenteZCustoTotal();
+        updateCalculateButtonState();
+      });
+      duracaoInput.addEventListener("blur", () => {
+        validateRequired(duracaoInput, duracaoError);
+        updateComprimidosPorDia();
+        updateResultadoDuracaoTratamento();
+        updateResultadoCustoTotal();
+        updateConcorrenteAManutencaoVisibility();
+        updateResultadoConcorrenteZCustoTotal();
+        updateCalculateButtonState();
+      });
+      duracaoInput.addEventListener("paste", (event) => {
+        event.preventDefault();
+        const pastedText = (event.clipboardData || window.clipboardData).getData("text");
+        duracaoInput.value = pastedText.replace(/\D/g, "");
+        validateRequired(duracaoInput, duracaoError);
+        updateComprimidosPorDia();
+        updateResultadoDuracaoTratamento();
+        updateResultadoCustoTotal();
+        updateConcorrenteAManutencaoVisibility();
+        updateResultadoConcorrenteZCustoTotal();
+        updateCalculateButtonState();
+      });
+      function bindPrecoEvents(precoInputElement, precoErrorElement) {
+        precoInputElement.addEventListener("input", () => {
+          precoInputElement.value = precoInputElement.value.replace(/\D/g, "");
+          validateRequired(precoInputElement, precoErrorElement);
+          updateComprimidosPorDia();
+          updateResultadoPrecoDia();
+          updateResultadoCustoTotal();
+          updateCalculateButtonState();
+        });
+        precoInputElement.addEventListener("blur", () => {
+          validateRequired(precoInputElement, precoErrorElement);
+          updateComprimidosPorDia();
+          updateResultadoPrecoDia();
+          updateResultadoCustoTotal();
+          updateCalculateButtonState();
+        });
+        precoInputElement.addEventListener("paste", (event) => {
+          event.preventDefault();
+          const pastedText = (event.clipboardData || window.clipboardData).getData("text");
+          precoInputElement.value = pastedText.replace(/\D/g, "");
+          validateRequired(precoInputElement, precoErrorElement);
+          updateComprimidosPorDia();
+          updateResultadoPrecoDia();
+          updateResultadoCustoTotal();
+          updateCalculateButtonState();
+        });
+      }
+
+      bindPrecoEvents(precoInputNumelvi, precoErrorNumelvi);
+      bindPrecoEvents(precoInputConcorrenteA, precoErrorConcorrenteA);
+      bindPrecoEvents(precoInputNumelviComparacao, precoErrorNumelviComparacao);
+      bindPrecoEvents(precoInputConcorrenteZ, precoErrorConcorrenteZ);
+      bindPrecoEvents(precoInputNumelviComparacaoZ, precoErrorNumelviComparacaoZ);
+
+      /*
+        Legacy listeners removed in favor of bindPrecoEvents for
+        numelvi + concorrente-a visible row handling.
+      */
+
+      function resetCalculatorForm() {
+        produtoInput.value = "numelvi";
+        pesoInput.value = "";
+        duracaoInput.value = "";
+        precoInputNumelvi.value = "";
+        precoInputConcorrenteA.value = "";
+        precoInputNumelviComparacao.value = "";
+        precoInputConcorrenteZ.value = "";
+        precoInputNumelviComparacaoZ.value = "";
+
+        [
+          produtoError,
+          pesoError,
+          duracaoError,
+          precoErrorNumelvi,
+          precoErrorConcorrenteA,
+          precoErrorNumelviComparacao,
+          precoErrorConcorrenteZ,
+          precoErrorNumelviComparacaoZ,
+        ].forEach((el) => {
+          if (el) toggleError(el, false);
+        });
+        [
+          produtoInput,
+          pesoInput,
+          duracaoInput,
+          precoInputNumelvi,
+          precoInputConcorrenteA,
+          precoInputNumelviComparacao,
+          precoInputConcorrenteZ,
+          precoInputNumelviComparacaoZ,
+        ].forEach((el) => {
+          if (el) toggleInputError(el, false);
+        });
+
+        if (resultadoAPrecoDiaAtaqueHidden) resultadoAPrecoDiaAtaqueHidden.value = "0";
+        if (resultadoAPrecoDiaManutencaoHidden) resultadoAPrecoDiaManutencaoHidden.value = "0";
+        if (resultadoATotalAtaqueHidden) resultadoATotalAtaqueHidden.value = "0";
+        if (resultadoATotalManutencaoHidden) resultadoATotalManutencaoHidden.value = "0";
+
+        [
+          "resultado-z-preco-dia-ataque",
+          "resultado-z-preco-dia-manutencao",
+          "resultado-z-total-ataque-hidden",
+          "resultado-z-total-manutencao-hidden",
+        ].forEach((id) => {
+          const el = document.getElementById(id);
+          if (el) el.value = "0";
+        });
+
+        updatePrecoRowsByProduto();
+        updateResultadoDuracaoTratamento();
+        updateComprimidosPorDia();
+        updateResultadoPeso();
+        updateResultadoPrecoDia();
+        updateResultadoCustoTotal();
+        updateResultadoProdutoImagemPorApresentacao();
+        updateConcorrenteAManutencaoVisibility();
+        updateResultadoConcorrenteACustoTotal();
+        updateResultadoConcorrenteZ();
+        updateResultadoConcorrenteZPrecoDia();
+        updateResultadoConcorrenteZCustoTotal();
+        updateNumelviResultsHeaderVisibility();
+        updateCalculateButtonState();
+      }
+
+      if (calcularButton) {
+        calcularButton.addEventListener("click", () => {
+          validateAllFields();
+          const produtoSelecionado = produtoInput.value;
+
+          if (produtoSelecionado === "concorrente-a") {
+            if (resultsConcorrenteAScreen) {
+              resultsConcorrenteAScreen.classList.remove("is-hidden");
+            }
+            if (resultsConcorrenteZScreen) {
+              resultsConcorrenteZScreen.classList.add("is-hidden");
+            }
+            if (resultsScreen) {
+              resultsScreen.classList.remove("is-hidden");
+            }
+            if (resultsBackButton) {
+              resultsBackButton.classList.remove("is-hidden");
+            }
+            updateResultadoNumelviComparacao();
+          } else if (produtoSelecionado === "concorrente-z") {
+            if (resultsConcorrenteAScreen) {
+              resultsConcorrenteAScreen.classList.add("is-hidden");
+            }
+            if (resultsConcorrenteZScreen) {
+              resultsConcorrenteZScreen.classList.remove("is-hidden");
+            }
+            if (resultsScreen) {
+              resultsScreen.classList.remove("is-hidden");
+            }
+            if (resultsBackButton) {
+              resultsBackButton.classList.remove("is-hidden");
+            }
+            updateResultadoNumelviComparacao();
+            updateResultadoConcorrenteZ();
+            updateResultadoConcorrenteZPrecoDia();
+            updateResultadoConcorrenteZCustoTotal();
+          } else {
+            if (resultsScreen) {
+              resultsScreen.classList.remove("is-hidden");
+            }
+            if (resultsConcorrenteAScreen) {
+              resultsConcorrenteAScreen.classList.add("is-hidden");
+            }
+            if (resultsConcorrenteZScreen) {
+              resultsConcorrenteZScreen.classList.add("is-hidden");
+            }
+            if (resultsBackButton) {
+              resultsBackButton.classList.remove("is-hidden");
+            }
+          }
+          if (calculatorMain) {
+            calculatorMain.classList.add("is-hidden");
+          }
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+      }
+
+      if (resultsBackButton) {
+        resultsBackButton.addEventListener("click", () => {
+          resetCalculatorForm();
+          if (calculatorMain) {
+            calculatorMain.classList.remove("is-hidden");
+          }
+          if (resultsScreen) {
+            resultsScreen.classList.add("is-hidden");
+          }
+          if (resultsConcorrenteAScreen) {
+            resultsConcorrenteAScreen.classList.add("is-hidden");
+          }
+          if (resultsConcorrenteZScreen) {
+            resultsConcorrenteZScreen.classList.add("is-hidden");
+          }
+          if (resultsBackButton) {
+            resultsBackButton.classList.add("is-hidden");
+          }
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+      }
+
+      updateResultadoDuracaoTratamento();
+      updateComprimidosPorDia();
+      updateResultadoPeso();
+      updateResultadoPrecoDia();
+      updateResultadoCustoTotal();
+      updateResultadoProdutoImagemPorApresentacao();
+      updateConcorrenteAManutencaoVisibility();
+      updateResultadoConcorrenteACustoTotal();
+      updateResultadoConcorrenteZ();
+      updateResultadoConcorrenteZPrecoDia();
+      updateResultadoConcorrenteZCustoTotal();
+      updatePrecoRowsByProduto();
+      updateNumelviResultsHeaderVisibility();
+      updateCalculateButtonState();
+
+      // Hook para conectar luego con la fórmula de resultados.
+      window.setResultadoProdutoImagem = function (src, altText) {
+        if (!resultadoProdutoImagem || !src) return;
+        resultadoProdutoImagem.src = src;
+        if (altText) {
+          resultadoProdutoImagem.alt = altText;
+        }
+      };
+    })();
+  </script>
+</body>
+
+</html>
