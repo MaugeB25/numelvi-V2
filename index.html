@@ -109,7 +109,7 @@
                   <label class="form-label custom-label">Peso corporal (kg)</label>
                   <div class="custom-input">
                     <input class="field-control" id="peso-corporal" type="text" inputmode="decimal"
-                      pattern="[0-9]*[\\.,]?[0-9]*" placeholder="16" max="79" />
+                      pattern="[0-9]*[\\.,]?[0-9]*" max="79" />
                   </div>
                   <div class="field-error is-hidden" id="peso-error" aria-live="polite">
                     <img src="./error.svg" alt="" class="field-error-icon" />
@@ -136,8 +136,7 @@
                 <div class="form-block">
                   <label class="form-label custom-label">Duração do tratamento (dias)</label>
                   <div class="custom-input">
-                    <input class="field-control" id="duracao-input" type="text" inputmode="numeric" pattern="[0-9]*"
-                      placeholder="343" />
+                    <input class="field-control" id="duracao-input" type="text" inputmode="numeric" pattern="[0-9]*" />
                   </div>
                   <div class="field-error is-hidden" id="duracao-error" aria-live="polite">
                     <img src="./error.svg" alt="" class="field-error-icon" />
@@ -153,8 +152,8 @@
                 <label class="form-label custom-label">Preço por caixa - Numelvi®</label>
                 <div class="custom-input">
                   <span class="input-prefix">R$</span>
-                  <input class="field-control" id="preco-input-numelvi" type="text" inputmode="numeric" pattern="[0-9]*"
-                    placeholder="230" />
+                  <input class="field-control" id="preco-input-numelvi" type="text" inputmode="numeric"
+                    pattern="[0-9]*" />
                 </div>
                 <div class="field-error is-hidden" id="preco-error-numelvi" aria-live="polite">
                   <img src="./error.svg" alt="" class="field-error-icon" />
@@ -175,7 +174,7 @@
                   <div class="custom-input">
                     <span class="input-prefix">R$</span>
                     <input class="field-control" id="preco-input-concorrente-a" type="text" inputmode="numeric"
-                      pattern="[0-9]*" placeholder="300" />
+                      pattern="[0-9]*" />
                   </div>
                   <div class="field-error is-hidden" id="preco-error-concorrente-a" aria-live="polite">
                     <img src="./error.svg" alt="" class="field-error-icon" />
@@ -192,7 +191,7 @@
                   <div class="custom-input">
                     <span class="input-prefix">R$</span>
                     <input class="field-control" id="preco-input-numelvi-comparacao" type="text" inputmode="numeric"
-                      pattern="[0-9]*" placeholder="230" />
+                      pattern="[0-9]*" />
                   </div>
                   <div class="field-error is-hidden" id="preco-error-numelvi-comparacao" aria-live="polite">
                     <img src="./error.svg" alt="" class="field-error-icon" />
@@ -214,7 +213,7 @@
                   <div class="custom-input">
                     <span class="input-prefix">R$</span>
                     <input class="field-control" id="preco-input-concorrente-z" type="text" inputmode="numeric"
-                      pattern="[0-9]*" placeholder="300" />
+                      pattern="[0-9]*" />
                   </div>
                   <div class="field-error is-hidden" id="preco-error-concorrente-z" aria-live="polite">
                     <img src="./error.svg" alt="" class="field-error-icon" />
@@ -231,7 +230,7 @@
                   <div class="custom-input">
                     <span class="input-prefix">R$</span>
                     <input class="field-control" id="preco-input-numelvi-comparacao-z" type="text" inputmode="numeric"
-                      pattern="[0-9]*" placeholder="230" />
+                      pattern="[0-9]*" />
                   </div>
                   <div class="field-error is-hidden" id="preco-error-numelvi-comparacao-z" aria-live="polite">
                     <img src="./error.svg" alt="" class="field-error-icon" />
@@ -288,7 +287,7 @@
                 <p class="results-metric-value-sm mb-2" id="resultado-a-ataque-valor">1 comp/día</p>
                 <div id="resultado-a-manutencao-bloco">
                   <div class="results-metric-divider"></div>
-                  <p class="results-metric-label mb-1 mt-2">Manutenção (dia 15 -34)</p>
+                  <p class="results-metric-label mb-1 mt-2">Manutenção (despois dia 15)</p>
                   <p class="results-metric-value-sm mb-0" id="resultado-a-manutencao-valor">0.5 comp/día</p>
                 </div>
               </article>
@@ -757,13 +756,28 @@
             ? precoInputNumelviComparacaoZ.value
             : precoInputNumelvi.value;
         const precoValue = parseFloat(precoBase.replace(",", "."));
+        const pesoValue = parseFloat(pesoInput.value.replace(",", "."));
+        const doseNumelvi = Number.isNaN(pesoValue)
+          ? null
+          : tabelaDosificacaoNumelvi.find((item) => pesoValue >= item.min && pesoValue <= item.max);
 
-        if (Number.isNaN(precoValue)) {
+        let doseDiaValue = doseNumelvi?.comprimidosDia ?? Number.NaN;
+
+        if (Number.isNaN(doseDiaValue)) {
+          const doseDiaTexto = resultadoDoseDia?.textContent || "";
+          const doseDiaMatch = doseDiaTexto.match(/\d+(?:[.,]\d+)?/);
+          doseDiaValue = doseDiaMatch
+            ? parseFloat(doseDiaMatch[0].replace(",", "."))
+            : Number.NaN;
+        }
+
+        if (Number.isNaN(precoValue) || Number.isNaN(doseDiaValue)) {
           resultadoPrecoDia.textContent = defaultValue;
           return;
         }
 
-        const precoPorDia = precoValue / 30;
+        const comprimidosPorCaixaNumelvi = 30;
+        const precoPorDia = (precoValue / comprimidosPorCaixaNumelvi) * doseDiaValue;
         const precoFormatado = precoPorDia.toFixed(2).replace(".", ",");
         resultadoPrecoDia.textContent = `R$ ${precoFormatado}`;
       }
@@ -933,7 +947,7 @@
               resultadoAPrecoDiaPromedio.dataset.defaultValue || "R$ 10,235";
           } else {
             const promedio = custoTotal / duracaoValor;
-            resultadoAPrecoDiaPromedio.textContent = `R$ ${promedio.toFixed(3).replace(".", ",")}`;
+            resultadoAPrecoDiaPromedio.textContent = `R$ ${promedio.toFixed(2).replace(".", ",")}`;
           }
         }
       }
@@ -1116,14 +1130,28 @@
         if (!resultadoZPrecoDia) return;
         const defaultValue = resultadoZPrecoDia.dataset.defaultValue || "R$ 10,235";
         const precoConcorrente = parseFloat(precoInputConcorrenteZ.value.replace(",", "."));
+        const pesoValue = parseFloat(pesoInput.value.replace(",", "."));
+        const doseZ = Number.isNaN(pesoValue)
+          ? null
+          : tabelaDosificacaoConcorrenteZ.find((item) => pesoValue >= item.min && pesoValue <= item.max);
 
-        if (Number.isNaN(precoConcorrente)) {
+        let doseZValue = doseZ?.comprimidosDia ?? Number.NaN;
+
+        if (Number.isNaN(doseZValue)) {
+          const doseZTexto = resultadoZDia?.textContent || "";
+          const doseZMatch = doseZTexto.match(/\d+(?:[.,]\d+)?/);
+          doseZValue = doseZMatch
+            ? parseFloat(doseZMatch[0].replace(",", "."))
+            : Number.NaN;
+        }
+
+        if (Number.isNaN(precoConcorrente) || Number.isNaN(doseZValue)) {
           resultadoZPrecoDia.textContent = defaultValue;
           return;
         }
 
-        const precoDia = precoConcorrente / 30;
-        resultadoZPrecoDia.textContent = `R$ ${precoDia.toFixed(3).replace(".", ",")}`;
+        const precoDia = (precoConcorrente / 30) * doseZValue;
+        resultadoZPrecoDia.textContent = `R$ ${precoDia.toFixed(2).replace(".", ",")}`;
       }
 
       function updateResultadoConcorrenteZCustoTotal() {
@@ -1148,6 +1176,8 @@
         updatePrecoRowsByProduto();
         updateNumelviResultsHeaderVisibility();
         updateComprimidosPorDia();
+        updateResultadoPrecoDia();
+        updateResultadoCustoTotal();
         updateResultadoConcorrenteZ();
         updateResultadoConcorrenteZPrecoDia();
         updateResultadoConcorrenteZCustoTotal();
@@ -1158,6 +1188,8 @@
         updatePrecoRowsByProduto();
         updateNumelviResultsHeaderVisibility();
         updateComprimidosPorDia();
+        updateResultadoPrecoDia();
+        updateResultadoCustoTotal();
         updateResultadoConcorrenteZ();
         updateResultadoConcorrenteZPrecoDia();
         updateResultadoConcorrenteZCustoTotal();
@@ -1168,6 +1200,8 @@
         updatePrecoRowsByProduto();
         updateNumelviResultsHeaderVisibility();
         updateComprimidosPorDia();
+        updateResultadoPrecoDia();
+        updateResultadoCustoTotal();
         updateResultadoConcorrenteZ();
         updateCalculateButtonState();
       });
@@ -1184,6 +1218,8 @@
         pesoInput.value = sanitizedValue;
         validatePeso();
         updateComprimidosPorDia();
+        updateResultadoPrecoDia();
+        updateResultadoCustoTotal();
         updateResultadoConcorrenteZ();
         updateResultadoConcorrenteZPrecoDia();
         updateResultadoConcorrenteZCustoTotal();
@@ -1193,6 +1229,8 @@
       pesoInput.addEventListener("blur", () => {
         validatePeso();
         updateComprimidosPorDia();
+        updateResultadoPrecoDia();
+        updateResultadoCustoTotal();
         updateResultadoConcorrenteZ();
         updateResultadoConcorrenteZPrecoDia();
         updateResultadoConcorrenteZCustoTotal();
@@ -1214,6 +1252,8 @@
         pesoInput.value = sanitizedValue;
         validatePeso();
         updateComprimidosPorDia();
+        updateResultadoPrecoDia();
+        updateResultadoCustoTotal();
         updateResultadoConcorrenteZ();
         updateResultadoConcorrenteZPrecoDia();
         updateResultadoConcorrenteZCustoTotal();
@@ -1252,8 +1292,21 @@
         updateCalculateButtonState();
       });
       function bindPrecoEvents(precoInputElement, precoErrorElement) {
+        function sanitizePrecoInputValue(rawValue) {
+          let sanitizedValue = rawValue.replace(/[^0-9.,]/g, "");
+          const firstSeparatorIndex = sanitizedValue.search(/[.,]/);
+
+          if (firstSeparatorIndex !== -1) {
+            const integerPart = sanitizedValue.slice(0, firstSeparatorIndex + 1);
+            const decimalPart = sanitizedValue.slice(firstSeparatorIndex + 1).replace(/[.,]/g, "");
+            sanitizedValue = integerPart + decimalPart;
+          }
+
+          return sanitizedValue;
+        }
+
         precoInputElement.addEventListener("input", () => {
-          precoInputElement.value = precoInputElement.value.replace(/\D/g, "");
+          precoInputElement.value = sanitizePrecoInputValue(precoInputElement.value);
           validateRequired(precoInputElement, precoErrorElement);
           updateComprimidosPorDia();
           updateResultadoPrecoDia();
@@ -1270,7 +1323,7 @@
         precoInputElement.addEventListener("paste", (event) => {
           event.preventDefault();
           const pastedText = (event.clipboardData || window.clipboardData).getData("text");
-          precoInputElement.value = pastedText.replace(/\D/g, "");
+          precoInputElement.value = sanitizePrecoInputValue(pastedText);
           validateRequired(precoInputElement, precoErrorElement);
           updateComprimidosPorDia();
           updateResultadoPrecoDia();
