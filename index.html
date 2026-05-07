@@ -198,7 +198,7 @@
                     <p class="field-error-text mb-0">Informe o preço por caixa para continuar.</p>
                   </div>
                   <p class="field-helper mb-0">
-                    Informe para exibir a comparação de custo lado a lado
+                    Correspondente a apresentação <span id="presentacion-numelvi"></span>
                   </p>
                 </div>
               </div>
@@ -237,7 +237,7 @@
                     <p class="field-error-text mb-0">Informe o preço por caixa para continuar.</p>
                   </div>
                   <p class="field-helper mb-0">
-                    Informe para exibir a comparação de custo lado a lado
+                    Correspondente a apresentação <span id="presentacion-numelvi2"></span>
                   </p>
                 </div>
               </div>
@@ -312,10 +312,10 @@
           </div>
 
           <p class="results-competitor-note mb-0">
-            O Concorrente A exige dose de ataque de 1 comprimido/dia nos primeiros 14 dias, depois 0.5 comprimidos/dia
-            (manutenção).
-            <br />
-            O preço/dia exibido é a média ponderada do tratamento completo.
+            O Concorrente A requer uma fase inicial do tratamento com administração diária em dose dobrada da dose
+            recomendada, durante os primeiros 14 dias. Após esse período, o tratamento segue com a dose diária
+            recomendada conforme o peso. O preço/dia apresentado corresponde à média ponderada de todo o tratamento.
+
           </p>
           <input type="hidden" id="resultado-a-preco-dia-ataque" value="0" />
           <input type="hidden" id="resultado-a-preco-dia-manutencao" value="0" />
@@ -399,6 +399,8 @@
               <div class="results-pills">
                 <p class="results-pill mb-0" id="resultado-peso"><strong>Peso:</strong> <span id="resultado-peso-valor"
                     data-default-value="16kg">16kg</span></p>
+                <p class="results-pill mb-0 is-hidden" id="presentacion-numelvi-row"><strong>Apresentação
+                    Numelvi®:</strong> <span id="presentacion-numelvi">—</span></p>
                 <p class="results-pill mb-0" id="resultado-comprimidos-apresentacao"
                   data-default-value="0.5 comprimidos - Apresentação: 31.6 mg"><strong>Comprimidos por día:</strong>
                   <span id="resultado-comprimidos-apresentacao-valor">0.5 comprimidos - Apresentação: 31.6 mg</span>
@@ -433,14 +435,16 @@
             </div>
 
             <div class="">
-              <img src="AÇÃORÁPIDA.svg" alt="AÇÃO + RÁPIDA" class="results-feature-icon" />
+              <img src="https://br-numelvi.pre.mah.wpcust.com/wp-content/uploads/sites/213/2026/05/ACAORAPIDA.svg"
+                alt="AÇÃO + RÁPIDA" class="results-feature-icon" />
               <p class="results-feature-title">AÇÃO + RÁPIDA</p>
               <p class="results-feature-text">Melhora visível a partir de 2 horas após a primeira dose</p>
 
             </div>
 
             <div class="">
-              <img src="VACINAÇÃO.svg" alt="VACINAÇÃO" class="results-feature-icon" />
+              <img src="https://br-numelvi.pre.mah.wpcust.com/wp-content/uploads/sites/213/2026/05/VACINACAO.svg"
+                alt="VACINAÇÃO" class="results-feature-icon" />
               <p class="results-feature-title">Vacinação</p>
               <p class="results-feature-text">Sem impacto na resposta vacinal</p>
 
@@ -456,7 +460,7 @@
                 <img src="./icono-dosis.svg" alt="" class="results-metric-icon" />
                 <p class="results-metric-label mb-1">Dose por dia</p>
                 <p class="results-metric-value mb-0" id="resultado-dose-dia" data-default-value="0.5 comp/día">0.5
-                  comp/día</p>
+                  comp/dia</p>
               </article>
             </div>
             <div class="col-12 col-md-4">
@@ -899,6 +903,48 @@
         return `${valor} ${label}`;
       }
 
+      function updatePresentacionNumelviConcorrenteA() {
+        const row = document.getElementById("presentacion-numelvi-row");
+        const span = document.getElementById("presentacion-numelvi");
+        if (!row || !span) return;
+        if (produtoInput.value !== "concorrente-a") {
+          row.classList.add("is-hidden");
+          return;
+        }
+        row.classList.remove("is-hidden");
+        const pesoValue = parseFloat(pesoInput.value.replace(",", "."));
+        if (Number.isNaN(pesoValue)) {
+          span.textContent = "—";
+          return;
+        }
+        const doseNumelvi = tabelaDosificacaoNumelvi.find((item) => pesoValue >= item.min && pesoValue <= item.max);
+        if (!doseNumelvi) {
+          span.textContent = "—";
+          return;
+        }
+        span.textContent = `${formatNumero(doseNumelvi.apresentacaoMg)} mg`;
+      }
+
+      function updatePresentacionNumelviConcorrenteZ() {
+        const span = document.getElementById("presentacion-numelvi2");
+        if (!span) return;
+        if (produtoInput.value !== "concorrente-z") {
+          span.textContent = "";
+          return;
+        }
+        const pesoValue = parseFloat(pesoInput.value.replace(",", "."));
+        if (Number.isNaN(pesoValue)) {
+          span.textContent = "—";
+          return;
+        }
+        const doseNumelvi = tabelaDosificacaoNumelvi.find((item) => pesoValue >= item.min && pesoValue <= item.max);
+        if (!doseNumelvi) {
+          span.textContent = "—";
+          return;
+        }
+        span.textContent = `${formatNumero(doseNumelvi.apresentacaoMg)} mg`;
+      }
+
       function updateResultadoConcorrenteAAtaque(doseBase) {
         if (!resultadoAAtaqueValor) return;
         const doseAtaque = doseBase * 2;
@@ -990,6 +1036,8 @@
       }
 
       function updateComprimidosPorDia() {
+        updatePresentacionNumelviConcorrenteA();
+        updatePresentacionNumelviConcorrenteZ();
         if (!comprimidosDiaOutput || !resultadoComprimidosApresentacao || !resultadoComprimidosApresentacaoValor) return;
 
         const defaultComprimidos = comprimidosDiaOutput.dataset.defaultValue || "Calculado automaticamente";
@@ -1115,6 +1163,8 @@
       }
 
       function updateResultadoNumelviComparacao() {
+        updatePresentacionNumelviConcorrenteA();
+        updatePresentacionNumelviConcorrenteZ();
         if (!resultadoComprimidosApresentacaoValor || !resultadoDoseDia) return;
         const defaultResultado =
           resultadoComprimidosApresentacao.dataset.defaultValue || "0.5 comprimidos - Apresentação: 31.6 mg";
