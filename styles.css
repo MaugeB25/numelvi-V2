@@ -616,6 +616,33 @@ div#preco-con-concorrente-a-row,
   padding: 10px;
 }
 
+p.results-feature-title {
+  color: #182B29;
+  font-family: Montserrat;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 140%;
+  margin-top: 15px;
+  margin-bottom: 5px
+}
+
+.results-feature-text {
+  font-size: 16px;
+  margin-bottom: 0;
+}
+
+.results-features {
+  grid-template-columns: repeat(4, 1fr);
+  margin: 30px 0;
+  gap: 10px;
+  display: grid;
+}
+
+.results-features>div {
+  width: 100%;
+}
+
 @media (max-width: 891.98px) {
 
   img#results-vs-icon {
