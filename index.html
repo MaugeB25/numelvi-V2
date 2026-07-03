@@ -147,6 +147,40 @@
               </div>
             </div>
 
+
+            <div class="row g-3 field-row align-items-center" role="group" aria-label="Apresentação Numelvi">
+              <div class="col-12 col-md-6">
+                <div class="form-block mb-md-0">
+                  <label class="form-label custom-label">Selecione a apresentação:</label>
+                  <p class="field-helper mb-0">Numelvi® está disponível em duas apresentações. Selecione uma opção antes de realizar o cálculo.</p>
+                  <div class="field-error is-hidden" id="apresentacao-error" aria-live="polite">
+                    <img src="./error.svg" alt="" class="field-error-icon" />
+                    <p class="field-error-text mb-0">Informe uma apresentação</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12 col-md-3">
+                <div class="form-block mb-md-0">
+                  <button type="button" class="results-pill w-100 mb-0 text-center py-3" id="apresentacao-30-btn"
+                    data-comprimidos-caixa="30" aria-pressed="false">
+                    <strong>30</strong> Comprimidos
+                  </button>
+                </div>
+              </div>
+              <div class="col-12 col-md-3">
+                <div class="form-block mb-md-0">
+                  <button type="button" class="results-pill w-100 mb-0 text-center py-3" id="apresentacao-90-btn"
+                    data-comprimidos-caixa="90" aria-pressed="false">
+                    <strong>90</strong> Comprimidos
+                  </button>
+                </div>
+              </div>
+            </div>
+
+
+
+
             <div class="row g-3 field-row" id="preco-row">
               <div class="form-block">
                 <label class="form-label custom-label">Preço por caixa - Numelvi®</label>
@@ -407,6 +441,8 @@
                 </p>
                 <p class="results-pill mb-0"><strong>Duração do tratamento:</strong> <span
                     id="resultado-duracao-tratamento" data-default-value="34 dias">34 dias</span></p>
+                    <p class="results-pill mb-0"><strong>Caixa de:</strong>
+                       <span id="resultado-apresentacao-caixa" data-default-value=""></span></p>
               </div>
             </div>
             <div class="results-product-image-wrap">
@@ -525,6 +561,7 @@
       const precoConConcorrenteZRow = document.getElementById("preco-con-concorrente-z-row");
       const resultadoProdutoImagem = document.getElementById("resultado-produto-imagem");
       const resultadoDuracaoTratamento = document.getElementById("resultado-duracao-tratamento");
+      const resultadoApresentacaoCaixa = document.getElementById("resultado-apresentacao-caixa");
       const resultadoPesoValor = document.getElementById("resultado-peso-valor");
       const comprimidosDiaOutput = document.getElementById("comprimidos-dia-output");
       const resultadoComprimidosApresentacao = document.getElementById("resultado-comprimidos-apresentacao");
@@ -550,6 +587,10 @@
       const resultadoZDia = document.getElementById("resultado-z-dia");
       const resultadoZPrecoDia = document.getElementById("resultado-z-preco-dia");
       const resultadoZCustoTotal = document.getElementById("resultado-z-custo-total");
+      const apresentacao30Btn = document.getElementById("apresentacao-30-btn");
+      const apresentacao90Btn = document.getElementById("apresentacao-90-btn");
+      const apresentacaoError = document.getElementById("apresentacao-error");
+      const apresentacaoBtns = [apresentacao30Btn, apresentacao90Btn].filter(Boolean);
 
       if (
         !produtoInput || !produtoError || !pesoInput || !pesoError || !pesoErrorText || !duracaoInput || !duracaoError
@@ -641,10 +682,26 @@
         return !isInvalid;
       }
 
+      function toggleApresentacaoError(shouldShow) {
+        if (apresentacaoError) {
+          toggleError(apresentacaoError, shouldShow);
+        }
+        apresentacaoBtns.forEach((btn) => {
+          btn.classList.toggle("input-error", shouldShow);
+        });
+      }
+
+      function validateApresentacao() {
+        const isValid = Boolean(getComprimidosPorCaixaNumelvi());
+        toggleApresentacaoError(!isValid);
+        return isValid;
+      }
+
       function validateAllFields() {
         const isProdutoValid = validateRequired(produtoInput, produtoError);
         const isPesoValid = validatePeso();
         const isDuracaoValid = validateRequired(duracaoInput, duracaoError);
+        const isApresentacaoValid = validateApresentacao();
         const isPrecoRowVisible = !precoRow.classList.contains("is-hidden");
         const isPrecoConcorrenteARowVisible = !precoConConcorrenteARow.classList.contains("is-hidden");
         const isPrecoConcorrenteZRowVisible = !precoConConcorrenteZRow.classList.contains("is-hidden");
@@ -664,7 +721,7 @@
           isPrecoValid = false;
         }
 
-        return isProdutoValid && isPesoValid && isDuracaoValid && isPrecoValid;
+        return isProdutoValid && isPesoValid && isDuracaoValid && isApresentacaoValid && isPrecoValid;
       }
 
       function isFormReadyToCalculate() {
@@ -684,6 +741,10 @@
           return false;
         }
 
+        if (!getComprimidosPorCaixaNumelvi()) {
+          return false;
+        }
+
         if (isPrecoConcorrenteARowVisible) {
           if (!precoConcorrenteAValue || !precoNumelviComparacaoValue) return false;
         } else if (isPrecoConcorrenteZRowVisible) {
@@ -695,6 +756,45 @@
         }
 
         return pesoValue >= 3 && pesoValue <= 79;
+      }
+
+      function getComprimidosPorCaixaNumelvi() {
+        const selectedBtn = apresentacaoBtns.find((btn) => btn.classList.contains("is-selected"));
+        if (!selectedBtn) return null;
+        const value = parseInt(selectedBtn.dataset.comprimidosCaixa, 10);
+        return Number.isNaN(value) ? null : value;
+      }
+
+      function updateResultadoApresentacaoCaixa() {
+        if (!resultadoApresentacaoCaixa) return;
+        const defaultValue = resultadoApresentacaoCaixa.dataset.defaultValue || "";
+        const comprimidos = getComprimidosPorCaixaNumelvi();
+        resultadoApresentacaoCaixa.textContent = comprimidos ? `${comprimidos} Comprimidos` : defaultValue;
+      }
+
+      function selectApresentacao(selectedBtn) {
+        apresentacaoBtns.forEach((btn) => {
+          const isSelected = btn === selectedBtn;
+          btn.classList.toggle("is-selected", isSelected);
+          btn.setAttribute("aria-pressed", isSelected ? "true" : "false");
+        });
+        updateResultadoApresentacaoCaixa();
+        toggleApresentacaoError(false);
+        updateResultadoPrecoDia();
+        updateResultadoCustoTotal();
+        updateComprimidosPorDia();
+        updateResultadoConcorrenteZPrecoDia();
+        updateResultadoConcorrenteZCustoTotal();
+        updateCalculateButtonState();
+      }
+
+      function clearApresentacaoSelection() {
+        apresentacaoBtns.forEach((btn) => {
+          btn.classList.remove("is-selected");
+          btn.setAttribute("aria-pressed", "false");
+        });
+        updateResultadoApresentacaoCaixa();
+        toggleApresentacaoError(false);
       }
 
       function updateCalculateButtonState() {
@@ -813,7 +913,12 @@
           return;
         }
 
-        const comprimidosPorCaixaNumelvi = 30;
+        const comprimidosPorCaixaNumelvi = getComprimidosPorCaixaNumelvi();
+        if (!comprimidosPorCaixaNumelvi) {
+          resultadoPrecoDia.textContent = defaultValue;
+          return;
+        }
+
         const precoPorDia = (precoValue / comprimidosPorCaixaNumelvi) * doseDiaValue;
         const precoFormatado = precoPorDia.toFixed(2).replace(".", ",");
         resultadoPrecoDia.textContent = `R$ ${precoFormatado}`;
@@ -975,7 +1080,25 @@
           return;
         }
 
-        const valorPorDose = precoCaixaConcorrente / 20;
+        const comprimidosPorCaixa = getComprimidosPorCaixaNumelvi();
+        if (!comprimidosPorCaixa) {
+          resultadoAPrecoDiaPromedio.textContent = defaultValue;
+          if (resultadoAPrecoDiaAtaqueHidden) {
+            resultadoAPrecoDiaAtaqueHidden.value = "0";
+          }
+          if (resultadoAPrecoDiaManutencaoHidden) {
+            resultadoAPrecoDiaManutencaoHidden.value = "0";
+          }
+          if (resultadoATotalAtaqueHidden) {
+            resultadoATotalAtaqueHidden.value = "0";
+          }
+          if (resultadoATotalManutencaoHidden) {
+            resultadoATotalManutencaoHidden.value = "0";
+          }
+          return;
+        }
+
+        const valorPorDose = precoCaixaConcorrente / comprimidosPorCaixa;
         const diasAtaque = Number.isNaN(duracao) || duracao <= 0 ? 0 : Math.min(duracao, 14);
         const diasManutencao = Number.isNaN(duracao) || duracao <= 14 ? 0 : duracao - 14;
         const doseAtaqueDia = doseBase * 2;
@@ -1233,7 +1356,13 @@
           return;
         }
 
-        const precoDia = (precoConcorrente / 30) * doseZValue;
+        const comprimidosPorCaixa = getComprimidosPorCaixaNumelvi();
+        if (!comprimidosPorCaixa) {
+          resultadoZPrecoDia.textContent = defaultValue;
+          return;
+        }
+
+        const precoDia = (precoConcorrente / comprimidosPorCaixa) * doseZValue;
         resultadoZPrecoDia.textContent = `R$ ${precoDia.toFixed(2).replace(".", ",")}`;
       }
 
@@ -1398,6 +1527,7 @@
         });
         precoInputElement.addEventListener("blur", () => {
           validateRequired(precoInputElement, precoErrorElement);
+          validateApresentacao();
           updateComprimidosPorDia();
           updateResultadoPrecoDia();
           updateResultadoCustoTotal();
@@ -1435,12 +1565,14 @@
         precoInputNumelviComparacao.value = "";
         precoInputConcorrenteZ.value = "";
         precoInputNumelviComparacaoZ.value = "";
+        clearApresentacaoSelection();
 
         [
           produtoError,
           pesoError,
           duracaoError,
           precoErrorNumelvi,
+          apresentacaoError,
           precoErrorConcorrenteA,
           precoErrorNumelviComparacao,
           precoErrorConcorrenteZ,
@@ -1494,8 +1626,12 @@
 
       if (calcularButton) {
         calcularButton.addEventListener("click", () => {
-          validateAllFields();
+          if (!validateAllFields()) return;
           const produtoSelecionado = produtoInput.value;
+
+          updateResultadoApresentacaoCaixa();
+          updateResultadoPrecoDia();
+          updateResultadoCustoTotal();
 
           if (produtoSelecionado === "concorrente-a") {
             if (resultsConcorrenteAScreen) {
@@ -1510,6 +1646,7 @@
             if (resultsBackButton) {
               resultsBackButton.classList.remove("is-hidden");
             }
+            updateComprimidosPorDia();
             updateResultadoNumelviComparacao();
           } else if (produtoSelecionado === "concorrente-z") {
             if (resultsConcorrenteAScreen) {
@@ -1545,6 +1682,7 @@
           if (calculatorMain) {
             calculatorMain.classList.add("is-hidden");
           }
+          updateResultadoApresentacaoCaixa();
           window.scrollTo({ top: 0, behavior: "smooth" });
         });
       }
@@ -1571,7 +1709,14 @@
         });
       }
 
+      apresentacaoBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          selectApresentacao(btn);
+        });
+      });
+
       updateResultadoDuracaoTratamento();
+      updateResultadoApresentacaoCaixa();
       updateComprimidosPorDia();
       updateResultadoPeso();
       updateResultadoPrecoDia();

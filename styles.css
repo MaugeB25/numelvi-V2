@@ -472,6 +472,22 @@ div#results-numelvi-logo {
   font-weight: 600;
 }
 
+button.results-pill {
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+}
+
+button.results-pill.is-selected {
+  background: var(--numelvi-primary-strong);
+  border-color: var(--numelvi-primary-strong);
+  color: var(--numelvi-white);
+}
+
+button.results-pill.input-error {
+  border-color: #A41104;
+}
+
 .results-product-image-wrap {
   width: 336px;
   flex-shrink: 0;
@@ -614,6 +630,8 @@ div#preco-con-concorrente-a-row,
   background: #E1F3F1;
   border-radius: 12px;
   padding: 10px;
+  margin-top: 24px;
+  
 }
 
 p.results-feature-title {
@@ -641,6 +659,11 @@ p.results-feature-title {
 
 .results-features>div {
   width: 100%;
+}
+
+button#apresentacao-30-btn,
+button#apresentacao-90-btn {
+  padding: 20px !important;
 }
 
 @media (max-width: 891.98px) {
